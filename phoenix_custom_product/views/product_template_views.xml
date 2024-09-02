@@ -1,0 +1,79 @@
+<odoo>
+    <record id="view_product_template_form_custom" model="ir.ui.view">
+        <field name="name">product.template.form.custom</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Trouver la page notebook/page[1] et y ajouter les groupes -->
+            <xpath expr="//sheet/notebook/page[1]" position="after">
+                <page string="Champs Phoenix Pharma">
+                    <group>
+                        <!-- Groupe pour les Champs Phoenix Pharma -->
+                        <group string="Informations">
+                            <field name="sale_price" widget="monetary"/>
+                            <field name="dci_tag_ids" widget="many2many_tags"/>
+                            <field name="arrivage"/>
+                            <field name="pre_arrivage"/>
+                            <field name="new_product"/>
+                            <!--
+                            <field name="meilleures_ventes"/>
+                            <field name="mon_top"/>
+                            -->
+                        </group>
+                        <!-- Groupe pour Promotion -->
+                        <group string="Promotion">
+                            <field name="promotion"/>
+                        </group>
+                            <group string="Informations Promotion" attrs="{'invisible': [('promotion', '=', False)]}">
+                                    <field name="promotion_number" reaonly="1"/>
+                                    <field name="promotion_start_at"/>
+                                    <field name="promotion_end_at"/>
+                            </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- View for eCommerce product page -->
+    <template id="custom_product_template" inherit_id="website_sale.product">
+        <xpath expr="//div[@id='product_details']" position="inside">
+            <t t-if="product.promotion">
+                <div>
+                    <strong>Promotion:</strong>
+                    Yes
+                </div>
+            </t>
+            <t t-if="product.arrivage">
+                <div>
+                    <strong>Arrivage:</strong>
+                    Yes
+                </div>
+            </t>
+            <t t-if="product.pre_arrivage">
+                <div>
+                    <strong>Pré Arrivage:</strong>
+                    Yes
+                </div>
+            </t>
+            <t t-if="product.new_product">
+                <div>
+                    <strong>Nouveauté:</strong>
+                    Yes
+                </div>
+            </t>
+            <!--
+            <t t-if="product.meilleures_ventes">
+                <div>
+                    <strong>Meilleures Ventes: </strong> <t t-esc="product.meilleures_ventes"/>
+                </div>
+            </t>
+            <t t-if="product.mon_top">
+                <div>
+                    <strong>Mon Top: </strong> <t t-esc="product.mon_top"/>
+                </div>
+            </t>
+            -->
+        </xpath>
+    </template>
+</odoo>

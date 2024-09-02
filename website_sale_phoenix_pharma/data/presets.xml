@@ -1,0 +1,22 @@
+<odoo>
+    <record id="website_sale.products_categories" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="portal.footer_language_selector" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.template_header_contact" model="ir.ui.view">
+        <field name="active" eval="True"/>
+    </record>
+    <template id="template_header_opt" inherit_id="website.snippet_options" name="Header Template - Option">
+        <xpath expr="//we-select[@data-variable='header-template']" position="inside">
+            <we-button title="phoenix_pharma"
+                       data-customize-website-views="website_sale_phoenix_pharma.header"
+                       data-customize-website-variable="'phoenix_pharma'"
+                       data-img="/website_sale_phoenix_pharma/static/src/img/wbuilder/template_header_opt.svg"/>
+        </xpath>
+    </template>
+</odoo>
+

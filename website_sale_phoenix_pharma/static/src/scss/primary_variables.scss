@@ -1,0 +1,79 @@
+$o-website-value-palettes: (
+    (
+        'header-template':             'phoenix_pharma'
+        'color-palettes-name':         'phoenix_pharma',
+        // Fonts
+        // Buttons
+    ),
+);
+
+$o-theme-font-configs: (
+    'Poppins': (
+        'family':                       ('Poppins', sans-serif),
+        'url':                          'Poppins: 400, 500',
+        'properties' : (
+            'base': (
+                'font-size-base':       1rem,
+            ),
+        ),
+    ),
+);
+
+
+$o-color-palettes: map-merge($o-color-palettes,
+   (
+      'phoenix_pharma': (
+         'o-color-1':                    #bedb39,
+         'o-color-2':                    #2c3e50,
+         'o-color-3':                    #f2f2f2,
+         'o-color-4':                    #ffffff,
+         'o-color-5':                    #000000,
+      ),
+   )
+);
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'phoenix_pharma');
+
+$o-color-palettes: map-merge($o-color-palettes,
+   (
+      'phoenix_pharma': (
+
+         'o-cc1-bg':                     'o-color-*',
+         'o-cc2-text':                   'o-color-*',
+         'o-cc3-headings':               'o-color-*',
+         'o-cc1-h2':                     'o-color-*',
+         'o-cc3-h3':                     'o-color-*',
+         'o-cc4-h4':                     'o-color-*',
+         'o-cc5-h5':                     'o-color-*',
+         'o-cc3-h6':                     'o-color-*',
+         'o-cc3-link':                   'o-color-*',
+         'o-cc2-btn-primary':            'o-color-*',
+         'o-cc1-btn-primary-border':     'o-color-*',
+         'o-cc5-btn-secondary':          'o-color-*',
+         'o-cc1-btn-secondary-border':   'o-color-*',
+
+      ),
+   )
+);
+
+$o-color-palettes: map-merge($o-color-palettes,
+   (
+      'phoenix_pharma': (
+         'o-cc1-bg':                     'o-color-5',
+         'o-cc5-bg':                     'o-color-1',
+      ),
+    )
+);
+
+//$o-website-values-palettes: (
+  // (
+    //  'body-image': '/phoenix_pharma/static/src/img/background-lines.svg',
+      //'body-image-type': 'image' or 'pattern'
+   //)
+//);
+
+
+$o-website-values-palettes: (
+   (
+      'header-template': 'Contact',
+   ),
+);

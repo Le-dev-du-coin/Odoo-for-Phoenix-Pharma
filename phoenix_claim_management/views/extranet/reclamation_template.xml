@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="reclamation_form" name="Reclamation Form">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-center text-primary my-3">Soumettre une Réclamation</h1>
+                <form action="/submit/reclamation" method="post" class="form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <!-- Motif de la réclamation -->
+                    <div class="form-group">
+                        <label for="reason">Motif de la réclamation :</label>
+                        <select name="reason" id="reason" class="form-control" required="required">
+                            <option t-att-selected="'1' == reason" value="1">Produit facturé non livré</option>
+                            <option t-att-selected="'2' == reason" value="2">Produit périmé</option>
+                            <option t-att-selected="'3' == reason" value="3">Produit cassé</option>
+                            <option t-att-selected="'4' == reason" value="4">Péremption Proche</option>
+                            <option t-att-selected="'5' == reason" value="5">Produit Avarié</option>
+                            <option t-att-selected="'6' == reason" value="6">Quantité facturée erronée</option>
+                            <option t-att-selected="'7' == reason" value="7">Produit Trop Cher</option>
+                            <option t-att-selected="'8' == reason" value="8">Retour Bon Etat</option>
+                            <option t-att-selected="'9' == reason" value="9">Retour Bon Etat – Doublon Commande</option>
+                            <option t-att-selected="'10' == reason" value="10">Retour Bon Etat – Erreur Commande
+                            </option>
+                            <option t-att-selected="'11' == reason" value="11">Produit facturé différent de produit
+                                livré
+                            </option>
+                            <option t-att-selected="'12' == reason" value="12">Produit livré en excédent</option>
+                            <option t-att-selected="'13' == reason" value="13">Rappel de Lot</option>
+                        </select>
+                    </div>
+
+                    <!-- Numéro de facture -->
+                    <div class="form-group">
+                        <label for="invoice_number">N° de Facture</label>
+                        <input type="text" name="invoice_number" id="invoice_number" class="form-control"
+                               required="required" t-att-value="invoice_number"/>
+                    </div>
+
+                    <!-- Produits associés à la facture -->
+                    <div class="form-group" t-if="products">
+                        <label for="selected_products">Les produits de la facture</label>
+                        <select name="selected_products" id="selected_products" multiple="multiple"
+                                class="form-control">
+                            <t t-foreach="products" t-as="product">
+                                <option t-att-value="product.id" t-att-selected="product.id in selected_product_ids">
+                                    <t t-esc="product.name"/>
+                                </option>
+                            </t>
+                        </select>
+                        <!-- Message -->
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea name="message" id="message" class="form-control"
+                                      placeholder="Décrivez brièvement le problème">
+                                <t t-esc="message"/>
+                            </textarea>
+                        </div>
+                    </div>
+                    <!-- Bouton de soumission -->
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <t t-esc="button_text or 'Afficher les produits'"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

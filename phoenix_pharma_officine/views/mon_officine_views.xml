@@ -1,0 +1,97 @@
+<odoo>
+    <data>
+        <!-- Template pour afficher les factures -->
+        <template id="template_factures" name="Factures">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h2>Mes Factures</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro de Facture</th>
+                                <th>Date</th>
+                                <th>Montant Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="factures" t-as="facture">
+                                <tr>
+                                    <td>
+<!--                                        <a t-attf-href="/web#id=#{facture.id}&view_type=form&model=account.move">-->
+<!--                                            <t t-esc="facture.name"/>-->
+<!--                                        </a>-->
+                                    </td>
+                                    <td><t t-esc="facture.invoice_date"/></td>
+                                    <td><t t-esc="facture.amount_total"/> F CFA</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <a href="/mon_officine/factures/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                </div>
+            </t>
+        </template>
+
+        <!-- Template pour afficher les avoirs -->
+        <template id="template_avoirs" name="Avoirs">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h2>Mes Avoirs</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro d'Avoir</th>
+                                <th>Date</th>
+                                <th>Montant Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="avoirs" t-as="avoir">
+                                <tr>
+                                    <td>
+<!--                                        <a t-attf-href="/web#id=#{avoir.id}&view_type=form&model=account.move">-->
+<!--                                            <t t-esc="avoir.name"/>-->
+<!--                                        </a>-->
+                                    </td>
+                                    <td><t t-esc="avoir.invoice_date"/></td>
+                                    <td><t t-esc="avoir.amount_total"/> €</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <a href="/mon_officine/avoirs/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                </div>
+            </t>
+        </template>
+
+        <!-- Template pour afficher les relevés -->
+        <template id="template_releves" name="Relevés">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h2>Mes Relevés</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Numéro de Relevé</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="releves" t-as="releve">
+                                <tr>
+                                    <td>
+<!--                                        <a t-attf-href="/web#id=#{releve.id}&view_type=form&model=account.bank.statement">-->
+<!--                                            <t t-esc="releve.name"/>-->
+<!--                                        </a>-->
+                                    </td>
+                                    <td><t t-esc="releve.date"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <a href="/mon_officine/releves/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

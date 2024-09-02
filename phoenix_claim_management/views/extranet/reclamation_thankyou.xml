@@ -1,0 +1,10 @@
+<odoo>
+    <template id="reclamation_thankyou" name="Reclamation Thank You">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-center text-primary my-3">Thank You</h1>
+                <p>Your reclamation has been submitted successfully.</p>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <template id="template_compte_client" name="Compte Client">
+        <t t-call="website.layout">
+            <style>
+                .dropdown-section {
+                margin-bottom: 20px;
+                }
+
+                .info-content p {
+                font-size: 16px;
+                color: #2b2b2b;
+                margin-bottom: 10px;
+                }
+
+                .info-content p span {
+                font-weight: bold;
+                color: #29a744;
+                }
+            </style>
+            <div class="container">
+                <h2>Compte Client</h2>
+                <div class="dropdown-section">
+                    <select id="info-select" class="form-control">
+                        <option value="information">Informations generale</option>
+                        <option value="chiffre-affaire">Chiffre d'Affaires</option>
+                        <option value="remise">Remise</option>
+                        <option value="en-cours">En Cours</option>
+                        <option value="ristourne">Ristourne</option>
+                    </select>
+                </div>
+
+                <div id="content-area">
+                    <div id="information" class="info-content">
+                        <p>Information generale:
+                            <span>
+<!--                                <ul>-->
+<!--                                    <li>-->
+<!--                                        <strong>Nom :</strong>-->
+<!--                                        <t t-esc="company.name"/>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <strong>Adresse :</strong>-->
+<!--                                        <t t-esc="company.street"/>-->
+<!--                                        <t t-esc="company.city"/>-->
+<!--                                        <t t-esc="company.zip"/>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <strong>Pays :</strong>-->
+<!--                                        <t t-esc="company.country_id.name"/>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <strong>Téléphone :</strong>-->
+<!--                                        <t t-esc="company.phone"/>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <strong>Email :</strong>-->
+<!--                                        <t t-esc="company.email"/>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+                            </span>
+                        </p>
+                    </div>
+                    <div id="chiffre-affaire" class="info-content"  style="display: none;">
+                        <p>Chiffre d'Affaire du Mois:
+                            <span>
+                                <t t-esc="chiffre_affaire_mois"/>
+                            </span>
+                        </p>
+                        <p>Chiffre d'Affaire en cours de facturation:
+                            <span>
+                                <t t-esc="chiffre_affaire_cours"/>
+                            </span>
+                        </p>
+                        <p>Chiffre d'Affaire du Mois l'année précédente:
+                            <span>
+                                <t t-esc="chiffre_affaire_annee_precedente"/>
+                            </span>
+                        </p>
+                        <p>Évolution en %:
+                            <span>
+                                <t t-esc="evolution_pourcentage"/>
+                            </span>
+                        </p>
+                    </div>
+                    <div id="remise" class="info-content" style="display: none;">
+                        <p>Remise:
+                            <span>
+                                <t t-esc="remise"/>
+                            </span>
+                        </p>
+                    </div>
+                    <div id="en-cours" class="info-content" style="display: none;">
+                        <p>En Cours:
+                            <span>
+                                <t t-esc="en_cours"/>
+                            </span>
+                        </p>
+                    </div>
+                    <div id="ristourne" class="info-content" style="display: none;">
+                        <p>Ristourne:
+                            <span>
+                                <t t-esc="ristourne"/>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <script>
+            document.getElementById('info-select').addEventListener('change', function() {
+            var selectedValue = this.value;
+            var infoContents = document.querySelectorAll('.info-content');
+
+            infoContents.forEach(function(content) {
+            content.style.display = 'none';
+            });
+
+            document.getElementById(selectedValue).style.display = 'block';
+            });
+        </script>
+    </template>
+</odoo>

@@ -1,0 +1,29 @@
+<odoo>
+    <data noupdate="1">
+
+        <!-- Règle pour les utilisateurs backend -->
+        <record id="rule_reclamation_backend" model="ir.rule">
+            <field name="name">Reclamation Backend Rule</field>
+            <field name="model_id" ref="model_phoenix_reclamation"/>
+            <field name="domain_force">[]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Règle pour les utilisateurs du site web -->
+        <record id="rule_reclamation_website" model="ir.rule">
+            <field name="name">Reclamation Website Rule</field>
+            <field name="model_id" ref="model_phoenix_reclamation"/>
+            <field name="domain_force">[]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="groups_id" eval="[(4, ref('base.group_public'))]"/>
+        </record>
+
+    </data>
+</odoo>
