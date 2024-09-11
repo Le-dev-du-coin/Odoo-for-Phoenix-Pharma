@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="laboratory_template" name="Laboratoire">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-primary text-center mt-3">Laboratoire</h1>
+                <table class="table table-responsive table-striped border border-danger">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Produits</th>
+                            <th rowspan="2">Valorisation mensuelle en PGHT</th>
+                            <th rowspan="2">Prix</th>
+                            <th rowspan="2">Stock</th>
+                            <th rowspan="2">Commande en cours</th>
+                        </tr>
+                        <tr>
+                            <th>Prix Public</th>
+                            <th>Prix PGHT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="products" t-as="product">
+                            <tr>
+                                <td>
+                                    <t t-esc="product.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="product.labo_value"/>
+                                </td>
+                                <td>
+                                    <t t-esc="product.sale_price"/>
+                                    <br/>
+                                    <small>Prix Public</small>
+                                    <br/>
+                                    <small><t t-esc="product.standard_price"/> Prix PGHT</small>
+                                </td>
+                                <td>
+                                    <t t-esc="product.qty_available"/>
+                                </td>
+                                <td>7</td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

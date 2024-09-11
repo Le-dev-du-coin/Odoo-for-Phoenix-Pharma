@@ -1,6 +1,6 @@
 {
     'name': 'Extranet Custom Product',
-    'version': '1.0',
+    'version': '16.0.2.',
     'summary': 'Add custom fields to product template',
     'description': 'Module to add a custom fields to the product model',
     'author': 'Social360',
@@ -9,7 +9,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/product_template_views.xml',
-        'data/promo_sequence.xml',
+        #'data/promo_sequence.xml',
     ],
     'installable': True,
     'application': False,

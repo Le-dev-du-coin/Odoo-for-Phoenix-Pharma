@@ -4,7 +4,7 @@
     <template id="template_products_by_dci" name="Groupe DCI">
          <t t-call="website.layout">
             <div class="container">
-                <h1 class="text-center text-primary my-3">DCI <t t-esc="dci_tag_id"/></h1>
+                <h1 class="text-center text-primary my-3">DCI <t t-esc="dci_tag_ids.name"/></h1>
 
                 <!-- Formulaire de Recherche -->
                 <form class="mb-5 mt-5" action="" method="get">

@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="pre_arrivage_products_template" name="Pre Arrivages">
+    <template id="pre_arrivage_products_template" name="Pre-arrivages">
         <t t-call="website.layout">
-           <div class="container">
+            <div class="container">
                 <h1 class="text-center text-primary my-3">Pre Arrivages</h1>
 
                 <!-- Formulaire de Recherche -->
@@ -11,7 +12,7 @@
                             <input class="form-control bg-light" type="search" name="search" id="product_search"
                                    placeholder="Taper le nom d'un produit ou une DCI"
                                    oninput="fetchProductSuggestions()"/>
-                             <div id="suggestions" class="list-group"></div>
+                            <div id="suggestions" class="list-group"></div>
                         </div>
                         <div class="col-auto">
                             <input class="btn btn-primary" type="submit" value="Rechercher"/>
@@ -19,78 +20,88 @@
                     </div>
                 </form>
 
-
                 <!-- Affichage Produits -->
-                <table class="mt-3 mb-5 table table-responsive table-striped table-sm js_cart_lines">
-                    <thead>
-                        <th>Libelle</th>
-                        <th>Details du produits</th>
-                        <th>Prix HT</th>
-                        <th class="text-center">Quantite</th>
-                        <th></th>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="pre_arrivage_products" t-as="product">
-                            <tr>
-                                <td>
-                                    <t t-esc="product.name"/>
-                                </td>
-                                <td>
-                                    DCI :
-                                    <t t-foreach="product.dci_tag_ids" t-as="dci_tag">
-                                        <strong>
-                                            <a t-attf-href="/produits/dci/{{ dci_tag.id }}" class="link-dark" t-esc="dci_tag.name"/>
-                                        </strong>
-                                    </t>
-                                </td>
-                                <td>
-                                    <strong class="text-dark">
-                                        <t t-esc="product.list_price"
-                                           t-options="{'widget': 'monetary', 'display_currency': product.currency_id}"/>
-                                    </strong>
-                                    <br/>
-                                    <small>Prix public:
-                                        <span class="text-info">
-                                            <t t-esc="product.sale_price"
+                <div class="shadow p-3 mb-5 bg-body rounded-3">
+                    <table class="mt-3 mb-5 table table-responsive table-striped table-sm js_cart_lines">
+                        <thead class="fs-5 text">
+                            <th>Libelle</th>
+                            <th>Details du produit</th>
+                            <th>Prix HT</th>
+                            <th class="text-center">Quantité</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="pre_arrivage_products" t-as="product">
+                                <tr>
+                                    <td>
+                                        <t t-esc="product.name"/>
+                                    </td>
+                                    <td>
+                                        DCI :
+                                        <t t-foreach="product.dci_tag_ids" t-as="dci_tag">
+                                            <strong>
+                                                <a t-attf-href="/produits/dci/{{ dci_tag.id }}" class="link-dark"
+                                                   t-esc="dci_tag.name"/>
+                                            </strong>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <strong class="text-dark">
+                                            <t t-esc="product.list_price"
                                                t-options="{'widget': 'monetary', 'display_currency': product.currency_id}"/>
-                                        </span>
-                                    </small>
-                                    <t t-if="product.promotion">
-                                        <li class="text-success">Promotion</li>
-                                    </t>
-                                </td>
-                                <td class="text-center">
-                                    <div class="css_quantity input-group mx-auto justify-content-center">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-outline-primary" type="button"
-                                                    t-att-onclick="'decreaseQuantity(' + str(product.id) + ');'">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
+                                        </strong>
+                                        <br/>
+                                        <small>Prix public:
+                                            <span class="text-info">
+                                                <t t-esc="product.sale_price"
+                                                   t-options="{'widget': 'monetary', 'display_currency': product.currency_id}"/>
+                                            </span>
+                                        </small>
+                                        <t t-if="product.promotion">
+                                            <li class="text-success">Promotion</li>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="css_quantity input-group mx-auto justify-content-center">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-primary" type="button"
+                                                        t-att-onclick="'decreaseQuantity(' + str(product.id) + ');'">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" t-att-id="'qty_' + str(product.id)"
+                                                   class="form-control text-center" value="1" min="1"/>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-primary" type="button"
+                                                        t-att-onclick="'increaseQuantity(' + str(product.id) + ');'">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <input type="text" t-att-id="'qty_' + str(product.id)"
-                                               class="form-control text-center" value="1" min="1"/>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-primary" type="button"
-                                                    t-att-onclick="'increaseQuantity(' + str(product.id) + ');'">
-                                                <i class="fa fa-plus"></i>
+                                    </td>
+                                    <td>
+                                        <t t-if="product.qty_available > 0">
+                                            <button class="btn btn-primary"
+                                                    t-att-onclick="'addToCart(' + str(product.id) + ');'">
+                                                <i class="fa fa-cart-plus"></i>
+                                                Ajouter au panier
                                             </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="hidden" id="csrf_token" name="csrf_token"
-                                           t-att-value="request.csrf_token()"/>
-                                    <button class="btn btn-primary"
-                                            t-att-onclick="'addToCart(' + str(product.id) + ');'">
-                                        <i class="fa fa-cart-plus"></i>
-                                        Ajouter au panier
-                                    </button>
-                                </td>
-                            </tr>
+                                        </t>
+                                        <t t-else="">
+                                            <strong class="text-danger text-center align-middle">Indisponible</strong>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <!-- Pagination -->
+                    <div class="products_pager form-inline justify-content-center mt-3">
+                        <t t-call="website.pager">
+                            <t t-set="_classes">mt-2 ml-md-2</t>
                         </t>
-                    </tbody>
-                </table>
-
+                    </div>
+                </div>
             </div>
         </t>
     </template>

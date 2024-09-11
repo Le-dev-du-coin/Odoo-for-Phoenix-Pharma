@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <template id="access_denied_template" name="Acess non autorise">
+        <t t-call="website.layout">
+            <div class="container">
+                <p>Vous ne pouvez pas entre</p>
+            </div>
+        </t>
+    </template>
+</odoo>

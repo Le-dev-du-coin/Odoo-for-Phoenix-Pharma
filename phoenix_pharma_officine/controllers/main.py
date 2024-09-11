@@ -7,6 +7,8 @@ class MonOfficineController(http.Controller):
     @http.route('/mon-officine/factures', type='http', auth='user', website=True)
     def get_factures(self, **kwargs):
         factures = http.request.env['account.move'].search([('move_type', '=', 'out_invoice'), ('partner_id', '=', http.request.env.user.partner_id.id)])
+        company = http.request.env.user.partner_id.company_id
+        print('company:', company)
         context = {
             'factures': factures
         }
@@ -20,15 +22,17 @@ class MonOfficineController(http.Controller):
             }
         return http.request.render('phoenix_pharma_officine.template_avoirs', context)
 
-    @http.route('/mon_officine/releves', type='http', auth='user', website=True)
+    @http.route('/mon-officine/releves', type='http', auth='user', website=True)
     def get_releves(self, **kwargs):
         releves = http.request.env['account.bank.statement'].search([('partner_id', '=', http.request.env.user.partner_id.id)])
+        print('releves:', releves)
         context = {
             'releves': releves
         }
         return http.request.render('phoenix_pharma_officine.template_releves', context)
 
-    @http.route('/mon_officine/chiffre_affaire', type='http', auth="user", website=True)
+    # Customer account website part
+    @http.route('/mon-officine/compte-client', type='http', auth="user", website=True)
     def chiffre_affaire(self, **kwargs):
         user = http.request.env.user
         company = user.company_id
@@ -136,4 +140,5 @@ class MonOfficineController(http.Controller):
         values = {
             'company': company,
         }
+        print('company:', company)
         return http.request.render('phoenix_pharma_officine.template_compte_client', values)

@@ -25,7 +25,7 @@
                             <field name="promotion"/>
                         </group>
                             <group string="Informations Promotion" attrs="{'invisible': [('promotion', '=', False)]}">
-                                    <field name="promotion_number" reaonly="1"/>
+                                    <field name="promotion_title"/>
                                     <field name="promotion_start_at"/>
                                     <field name="promotion_end_at"/>
                             </group>

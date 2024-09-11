@@ -15,7 +15,7 @@
         'views/extranet/reclamation_template.xml',
         'views/extranet/reclamation_thankyou.xml',
         'views/reclamation_view.xml',
-        'views/reclamation_menu.xml',
+        #'views/reclamation_menu.xml',
         'security/ir.model.access.csv',
         #'security/security.xml',
     },

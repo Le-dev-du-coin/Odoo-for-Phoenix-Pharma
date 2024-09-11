@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_partner_form_escompte" model="ir.ui.view">
+        <field name="name">res.partner.form.escompte</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="inside">
+                <group string="Escompte et Ristourne">
+                    <field name="escompte_limit"/>
+                    <field name="ristourne_limit"/>
+                    <field name="escompte_rate"/>
+                    <field name="ristourne_rate"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_escompte_list" model="ir.ui.view">
+        <field name="name">escompte.list</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <field name="amount_total"/>
+                <field name="escompte_applied"/>
+                <field name="ristourne_applied"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

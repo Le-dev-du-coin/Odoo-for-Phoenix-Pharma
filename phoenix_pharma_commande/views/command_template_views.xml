@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!-- Template pour vos commandes -->
+    <template id="vos_commandes" name="Vos Commandes">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-primary text-center my-4">Vos Commandes</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Montant Total</th>
+                            <th>État</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="orders" t-as="order">
+                            <tr>
+                                <td>
+                                    <t t-esc="order.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.date_order"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.amount_total"/>
+                                    €
+                                </td>
+                                <td>
+                                    <t t-esc="order.state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template pour les commandes extranet -->
+    <template id="commandes_extranet" name="Commandes Extranet">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-primary text-center my-4">Commandes Extranet</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Montant Total</th>
+                            <th>État</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="ecommerce_orders" t-as="order">
+                            <tr>
+                                <td>
+                                    <t t-esc="order.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.date_order"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.amount_total"/>
+                                    €
+                                </td>
+                                <td>
+                                    <t t-esc="order.state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template pour la préparation en cours -->
+    <template id="preparation_en_cours">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-primary text-center my-4">Préparation en Cours</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Date</th>
+                            <th>Montant Total</th>
+                            <th>État</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="pending_orders" t-as="order">
+                            <tr>
+                                <td>
+                                    <t t-esc="order.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.date_order"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.amount_total"/>
+                                    €
+                                </td>
+                                <td>
+                                    <t t-esc="order.state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

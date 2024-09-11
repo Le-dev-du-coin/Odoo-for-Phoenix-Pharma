@@ -1,0 +1,27 @@
+<odoo>
+    <!-- Menu principal pour Escompte et Ristourne -->
+    <menuitem id="menu_escompte_ristourne" name="Escompte et Ristourne" parent="account.menu_finance"/>
+
+    <!-- Action pour afficher les escomptes -->
+    <record id="action_escompte" model="ir.actions.act_window">
+        <field name="name">Escomptes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_escompte_list"/>
+        <field name="domain">[('escompte_applied', '=', True)]</field>
+    </record>
+
+    <!-- Menu pour les escomptes -->
+    <menuitem id="menu_escompte" name="Escomptes" parent="menu_escompte_ristourne" action="action_escompte"/>
+
+    <!-- Action pour afficher les ristournes -->
+    <record id="action_ristourne" model="ir.actions.act_window">
+        <field name="name">Ristournes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('ristourne_applied', '=', True)]</field>
+    </record>
+
+    <!-- Menu pour les ristournes -->
+    <menuitem id="menu_ristourne" name="Ristournes" parent="menu_escompte_ristourne" action="action_ristourne"/>
+</odoo>

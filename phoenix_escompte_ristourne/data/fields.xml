@@ -1,0 +1,15 @@
+<odoo>
+    <record id="field_res_partner_escompte_rate" model="ir.model.fields">
+        <field name="name">escompte_rate</field>
+        <field name="model">res.partner</field>
+        <field name="ttype">float</field>
+        <field name="field_description">Escompte Rate</field>
+    </record>
+
+    <record id="field_res_partner_ristourne_rate" model="ir.model.fields">
+        <field name="name">ristourne_rate</field>
+        <field name="model">res.partner</field>
+        <field name="ttype">float</field>
+        <field name="field_description">Ristourne Rate</field>
+    </record>
+</odoo>
