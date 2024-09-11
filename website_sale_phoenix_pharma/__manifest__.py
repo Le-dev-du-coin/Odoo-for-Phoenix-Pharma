@@ -1,5 +1,5 @@
 {
-    'name': 'Phoenix Pharma Theme',
+    'name': 'Phoenix Pharma Extranet',
     'description': """
         Passe
     """,
@@ -8,7 +8,7 @@
     'author': 'Social360',
     'website': 'www.social360mali.com',
     'license': 'LGPL-3',
-    'depends': ['website', 'website_sale', 'product', ],#'l10n_syscohada'
+    'depends': ['website', 'website_sale', 'product', 'stock',],#'l10n_syscohada'
     'data': [
         'views/all_products_template.xml',
         'views/promotion_products_template.xml',
