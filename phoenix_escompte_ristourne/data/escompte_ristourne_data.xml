@@ -1,4 +1,4 @@
-<odoo>
+<!-- <odoo>
     <data noupdate="1">
         <record id="property_escompte_rate" model="ir.property">
             <field name="name">escompte_rate</field>
@@ -16,4 +16,4 @@
             <field name="res_model">res.partner</field>
         </record>
     </data>
-</odoo>
+</odoo> -->

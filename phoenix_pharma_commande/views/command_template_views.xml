@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="ecommerce_orders" t-as="order">
+                        <t t-foreach="extranet_orders" t-as="order">
                             <tr>
                                 <td>
                                     <t t-esc="order.name"/>

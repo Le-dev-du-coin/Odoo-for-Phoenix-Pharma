@@ -4,7 +4,7 @@ from odoo.http import request
 
 class ReclamationController(http.Controller):
 
-    @http.route('reclamation/vos-reclamations', type='http', auth='user', website=True)
+    @http.route('/reclamation/vos-reclamations', type='http', auth='user', website=True)
     def reclamation_website_view(self, **kw):
         user_id = request.env.user.id
         claim = request.env['reclamation'].search([('user_id', '=', user_id)])
@@ -12,6 +12,7 @@ class ReclamationController(http.Controller):
             'reclamations': claim,
         }
         return request.render('phoenix_claim_management.reclamation_view_template', context)
+
 
     @http.route('/submit/reclamation', type='http', auth='user', methods=['POST'], website=True)
     def submit_reclamation(self, **kwargs):

@@ -45,51 +45,53 @@
     window.decreaseQuantity = decreaseQuantity;
     window.addToCart = addToCart;
 //});
-function displaySuggestions(products) {
-    const suggestionsContainer = document.getElementById('suggestions');
-    suggestionsContainer.innerHTML = '';
 
-    if (products.length === 0) {
-        suggestionsContainer.innerHTML = '<p class="list-group-item">Aucun produit trouvé</p>';
-        return;
-    }
 
-    products.forEach(function(product) {
-        const suggestion = document.createElement('a');
-        suggestion.href = `/shop/product/${product.id}`;
-        suggestion.className = 'list-group-item list-group-item-action';
-        suggestion.innerHTML = `${product.name} - ${product.price} ${product.currency}`;
-        suggestionsContainer.appendChild(suggestion);
-    });
-}
-
-async function fetchProductSuggestions() {
-    const query = document.getElementById('product_search').value;
-
-    if (query.length >= 3) {
-        try {
-            const response = await fetch('/tous-les-produits/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({'search_term': query})
-            });
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des suggestions de produits.');
-            }
-
-            const data = await response.json();
-            const products = data.result; // Accéder au tableau des produits à partir de "result"
-
-            displaySuggestions(products);
-        } catch (error) {
-            console.error('Error fetching product suggestions:', error);
-        }
-    } else {
-        document.getElementById('suggestions').innerHTML = ''; // Vider les suggestions si moins de 3 caractères
-    }
-}
-
-document.getElementById('product_search').addEventListener('input', fetchProductSuggestions);
+//function displaySuggestions(products) {
+//    const suggestionsContainer = document.getElementById('suggestions');
+//    suggestionsContainer.innerHTML = '';
+//
+//    if (products.length === 0) {
+//        suggestionsContainer.innerHTML = '<p class="list-group-item">Aucun produit trouvé</p>';
+//        return;
+//    }
+//
+//    products.forEach(function(product) {
+//        const suggestion = document.createElement('a');
+//        suggestion.href = `/shop/product/${product.id}`;
+//        suggestion.className = 'list-group-item list-group-item-action';
+//        suggestion.innerHTML = `${product.name} - ${product.price} ${product.currency}`;
+//        suggestionsContainer.appendChild(suggestion);
+//    });
+//}
+//
+//async function fetchProductSuggestions() {
+//    const query = document.getElementById('product_search').value;
+//
+//    if (query.length >= 3) {
+//        try {
+//            const response = await fetch('/produits/tous-les-produits/search', {
+//                method: 'POST',
+//                headers: {
+//                    'Content-Type': 'application/json',
+//                },
+//                body: JSON.stringify({'search_term': query})
+//            });
+//
+//            if (!response.ok) {
+//                throw new Error('Erreur lors de la récupération des suggestions de produits.');
+//            }
+//
+//            const data = await response.json();
+//            const products = data.result; // Accéder au tableau des produits à partir de "result"
+//
+//            displaySuggestions(products);
+//        } catch (error) {
+//            console.error('Error fetching product suggestions:', error);
+//        }
+//    } else {
+//        document.getElementById('suggestions').innerHTML = ''; // Vider les suggestions si moins de 3 caractères
+//    }
+//}
+//
+//document.getElementById('product_search').addEventListener('input', fetchProductSuggestions);

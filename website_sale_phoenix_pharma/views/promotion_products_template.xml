@@ -1,22 +1,13 @@
 <odoo>
     <template id="promotion_products_template" name="Promotions">
         <t t-call="website.layout">
-           <div class="container">
+            <div class="container">
                 <h1 class="text-center text-primary my-3">Promotions</h1>
 
                 <!-- Formulaire de Recherche -->
-                <form class="mb-5 mt-5" action="" method="get">
-                    <div class="form-group row">
-                        <div class="col">
-                            <input class="form-control bg-light" type="search" name="search" id="product_search"
-                                   placeholder="Taper le nom d'un produit ou une DCI"
-                                   oninput="fetchProductSuggestions()"/>
-                             <div id="suggestions" class="list-group"></div>
-                        </div>
-                        <div class="col-auto">
-                            <input class="btn btn-primary" type="submit" value="Rechercher"/>
-                        </div>
-                    </div>
+                <form class="mb-5 mt-5" action="/produits/tous-les-produits/search" method="get">
+                    <t t-call="website.website_search_box"></t>
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 </form>
 
 
@@ -26,6 +17,8 @@
                         <th>No</th>
                         <th>Debut</th>
                         <th>Fin</th>
+                        <th>Libelle</th>
+                        <th>Prix HT</th>
                         <th class="text-center">Quantite</th>
                         <th></th>
                     </thead>
@@ -33,13 +26,18 @@
                         <t t-foreach="promo_products" t-as="product">
                             <tr>
                                 <td>
-                                   <strong> <t t-esc="product.promotion_title"/></strong>
+                                    <strong>
+                                        <t t-esc="product.promotion_title"/>
+                                    </strong>
                                 </td>
                                 <td>
                                     <t t-esc="product.promotion_start_at"/>
                                 </td>
                                 <td>
                                     <t t-esc="product.promotion_end_at"/>
+                                </td>
+                                <td>
+                                    <t t-esc="product.name"/>
                                 </td>
                                 <td>
                                     <strong class="text-dark">
@@ -76,24 +74,29 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="hidden" id="csrf_token" name="csrf_token"
-                                           t-att-value="request.csrf_token()"/>
-                                    <button class="btn btn-primary"
-                                            t-att-onclick="'addToCart(' + str(product.id) + ');'">
-                                        <i class="fa fa-cart-plus"></i>
-                                        Ajouter au panier
-                                    </button>
+                                    <t t-if="product.qty_available > 0">
+                                        <input type="hidden" id="csrf_token" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <button class="btn btn-primary"
+                                                t-att-onclick="'addToCart(' + str(product.id) + ');'">
+                                            <i class="fa fa-cart-plus"></i>
+                                            Ajouter au panier
+                                        </button>
+                                    </t>
+                                    <t t-else="">
+                                        <strong class="text-danger text-center align-middle">Indisponible</strong>
+                                    </t>
                                 </td>
                             </tr>
                         </t>
                     </tbody>
                 </table>
-                     <!-- Pagination -->
-                    <div class="products_pager form-inline justify-content-center mt-3">
-                        <t t-call="website.pager">
-                            <t t-set="_classes">mt-2 ml-md-2</t>
-                        </t>
-                    </div>
+                <!-- Pagination -->
+                <div class="products_pager form-inline justify-content-center mt-3">
+                    <t t-call="website.pager">
+                        <t t-set="_classes">mt-2 ml-md-2</t>
+                    </t>
+                </div>
             </div>
         </t>
     </template>

@@ -4,13 +4,31 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='sales_purchases']" position="inside">
-                <group string="Escompte et Ristourne">
-                    <field name="escompte_limit"/>
-                    <field name="ristourne_limit"/>
-                    <field name="escompte_rate"/>
-                    <field name="ristourne_rate"/>
-                </group>
+            <xpath expr="//sheet/notebook/page[4]" position="after">
+                <page name="escompte_ristourne" string="Escompte &amp; Ristourne">
+                    <group name="container_row_2">
+                        <group name="limit" string="Limite" priority="1">
+                            <field name="limit_1"/>
+                            <field name="limit_2"/>
+                            <field name="limit_3"/>
+                            <field name="limit_4"/>
+                        </group>
+                    </group>
+                    <group name="container_row_2">
+                        <group name="escompte_rate" string="Taux Escompte">
+                            <field name="escompte_rate_1" />
+                            <field name="escompte_rate_2" />
+                            <field name="escompte_rate_3" />
+                            <field name="escompte_rate_4" />
+                        </group>
+                        <group name="ristourne_rate" string="Taux Ristoune">
+                            <field name="ristourne_rate_1" />
+                            <field name="ristourne_rate_2" />
+                            <field name="ristourne_rate_3" />
+                            <field name="ristourne_rate_4" />
+                        </group>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

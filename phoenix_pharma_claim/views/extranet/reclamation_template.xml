@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- <template id="claim_assets_frontend" inherit_id="web.assets_backend" name="Include HTMX Library">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="https://unpkg.com/htmx.org@2.0.2"></script>
+        </xpath>
+    </template> -->
+
+    <template id="reclamation_form" name="Formulaire de Réclamation">
+        <t t-call="website.layout">
+            <div class="container">
+                <div class="shadow p-3 my-5 bg-body rounded-3">
+                    <h1 class="text-center text-primary my-2">Creer une reclamation</h1>
+                    <hr/>
+                    <form id="reclamationForm" action="/submit/reclamation" method="post">
+                        <div class="form-group mb-3">
+                            <label class="control-label" for="reason">Motif de la réclamation</label>
+                            <select class="form-control" id="reason" name="reason">
+                                <option>Produit facturé non livré</option>
+                                <option>Produit périmé</option>
+                                <option>Produit cassé</option>
+                                <option>Péremption Proche</option>
+                                <option>Produit Avarié</option>
+                                <option>Quantité facturée erronée</option>
+                                <option>Produit Trop Cher</option>
+                                <option>Retour Bon Etat</option>
+                                <option>Retour Bon Etat – Doublon Commande</option>
+                                <option>Retour Bon Etat – Erreur Commande</option>
+                                <option>Produit facturé différent de produit livré</option>
+                                <option>Produit livré en excédent</option>
+                                <option>Rappel de Lot</option>
+                                <!-- Ajouter d'autres options -->
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="invoice_number">Numéro de Facture</label>
+                            <input class="form-control" type="text" id="invoice_number" name="invoice_number"/>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary" type="button" onclick="onFindInvoice()">Trouver la Facture
+                            </button>
+                        </div>
+                        <!-- Produits affichés après la récupération via AJAX -->
+                        <div class="form-group mb-3" id="products_div" style="display:none;">
+                            <label for="selected_products">Produits</label>
+                            <select class="form-control" id="selected_products" name="selected_products"></select>
+                        </div>
+
+                        <!-- Champ de message qui apparaît après la récupération des produits -->
+                        <div class="form-group mb-3" id="message_field" style="display:none;">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" name="message"></textarea>
+                        </div>
+
+                        <!-- Bouton de soumission, masqué jusqu'à ce que la facture soit trouvée -->
+                        <div class="text-center">
+                            <button class="form-control" type="submit" id="submit_btn" style="display:none;">Soumettre
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

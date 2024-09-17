@@ -5,7 +5,7 @@
     'description': 'Module to add a custom fields to the product model',
     'author': 'Social360',
     'license': 'LGPL-3',
-    'depends': ['sale', 'website_sale', 'product', ],
+    'depends': ['sale', 'sale_management', 'website_sale', 'product', ],
     'data': [
         'security/ir.model.access.csv',
         'views/product_template_views.xml',

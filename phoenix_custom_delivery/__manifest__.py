@@ -10,9 +10,10 @@
     'website': 'www.social360mali.com',
     'license': 'AGPL-3',
     'depends': ['base'],
-    'data': [
-        'views/menu.xml',
-        'views/deliveryman.xml'
+    "data": [
+        "security/ir.model.access.csv",
+        "views/model_delivery_views.xml",
+        "views/model_deliveryman_views.xml"
     ],
     'installable': True,
     'application': True,

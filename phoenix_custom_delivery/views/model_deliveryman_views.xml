@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View model.deliveryman View Tree -->
+    <record id="view_model_deliveryman_tree" model="ir.ui.view">
+        <field name="name">view.model.deliveryman.tree</field>
+        <field name="model">model.deliveryman</field>
+        <field name="arch" type="xml">
+            <tree create="true">
+                <field name="full_name"/>
+                <field name="phone_number" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- View model.deliveryman form -->
+    <record id="view_model_deliveryman_form" model="ir.ui.view">
+        <field name="name">view.model.deliveryman.form</field>
+        <field name="model">model.deliveryman</field>
+        <field name="arch" type="xml">
+            <form string="Model Deliveryman">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="full_name"/>
+                        <h1>
+                            <field name="full_name" placeholder="Adama KANTE" default_focus="1"/>
+                        </h1>
+                    </div>
+                    <div class="o_row">
+                        <label for="phone_number"/>
+                        <h3>
+                            <field name="phone_number" placeholder="73451676"/>
+                        </h3>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View model.deliveryman search -->
+    <record id="view_model_deliveryman_search" model="ir.ui.view">
+        <field name="name">view.model.deliveryman.search</field>
+        <field name="model">model.deliveryman</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="Nom complet" name="full_name" domain="[]" context="{'group_by':'full_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action model.deliveryman -->
+    <record id="action_model_deliveryman" model="ir.actions.act_window">
+        <field name="name">Gestion des Livreurs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">model.deliveryman</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">
+                Aucun livreur trouvé, cliquez ici pour en ajouter un nouveau.
+            </p>
+        </field>
+    </record>
+</odoo>

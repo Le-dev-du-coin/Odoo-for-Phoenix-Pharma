@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View model.delivery View Tree -->
+    <record id="view_model_delivery_tree" model="ir.ui.view">
+        <field name="name">view.model.delivery.tree</field>
+        <field name="model">model.delivery</field>
+        <field name="arch" type="xml">
+            <tree create="true">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View model.delivery form -->
+    <record id="view_model_delivery_form" model="ir.ui.view">
+        <field name="name">view.model.delivery.form</field>
+        <field name="model">model.delivery</field>
+        <field name="arch" type="xml">
+            <form string="Model Delivery">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="deliveryman"/>
+                        <h1>
+                            <field name="deliveryman" placeholder="Adama KANTE"/>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View model.delivery search -->
+    <record id="view_model_delivery_search" model="ir.ui.view">
+        <field name="name">view.model.delivery.search</field>
+        <field name="model">model.delivery</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="deliveryman" name="deliveryman" domain="[]" context="{'group_by':'deliveryman'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action model.delivery -->
+    <record id="action_model_delivery" model="ir.actions.act_window">
+        <field name="name">Gestion des livraisons</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">model.delivery</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smiling_face">
+                Aucun enregistrement pour le moment!
+            </p>
+        </field>
+    </record>
+    <!-- Menu Root for Delivery -->
+    <menuitem id="menu_delivery_root" 
+              name="Gestion des livraisons" 
+              sequence="1"/>
+
+    <!-- Submenu for Deliveries (Livraisons) -->
+    <menuitem id="menu_delivery" 
+              name="Livraisons" 
+              parent="menu_delivery_root" 
+              action="action_model_delivery" 
+              sequence="20"/>
+
+    <!-- Submenu for Deliveries (Livraisons) -->
+    <menuitem id="menu_deliveryman" 
+              name="Livreurs" 
+              parent="menu_delivery_root" 
+              action="action_model_deliveryman" 
+              sequence="10"/>
+
+</odoo>

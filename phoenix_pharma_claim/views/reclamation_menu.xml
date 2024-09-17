@@ -2,7 +2,7 @@
     <!-- Définition de l'action -->
     <record id="action_reclamation" model="ir.actions.act_window">
         <field name="name">Reclamations</field>
-        <field name="res_model">reclamation</field>
+        <field name="res_model">phoenix_claim</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_reclamation_list"/>
         <field name="help" type="html">

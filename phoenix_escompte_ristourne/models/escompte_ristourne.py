@@ -4,10 +4,21 @@ from odoo import models, fields, api
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    escompte_limit = fields.Monetary(string='Limite Escompte', currency_field='currency_id')
-    ristourne_limit = fields.Monetary(string='Limite Ristourne', currency_field='currency_id')
-    escompte_rate = fields.Float(string='Taux Escompte (%)', default=3.0)
-    ristourne_rate = fields.Float(string='Taux Ristourne (%)', default=2.0)
+    limit_1 = fields.Monetary(string='Limite > 500 000 F', currency_field='currency_id', default=500000, tracking=True)
+    limit_2 = fields.Monetary(string='Limite > 1 000 000 F', currency_field='currency_id', default=1000000)
+    limit_3 = fields.Monetary(string='Limite > 2 000 000 F', currency_field='currency_id', default=2000000)
+    limit_4 = fields.Monetary(string='Limite > 4 000 000 F', currency_field='currency_id', default=4000000)
+    
+    # Taux escompte
+    escompte_rate_1 = fields.Float(string='Taux Escompte 1 (%)', default=1.5)
+    escompte_rate_2 = fields.Float(string='Taux Escompte 2 (%)', default=2.0)
+    escompte_rate_3 = fields.Float(string='Taux Escompte 3 (%)', default=2.5)
+    escompte_rate_4 = fields.Float(string='Taux Escompte 4 (%)', default=3.5)
+    # Taux ristourne
+    ristourne_rate_1 = fields.Float(string='Taux Ristourne 1 (%)', default=1.5)
+    ristourne_rate_2 = fields.Float(string='Taux Ristourne 2 (%)', default=2.0)
+    ristourne_rate_3 = fields.Float(string='Taux Ristourne 3 (%)', default=2.5)
+    ristourne_rate_4 = fields.Float(string='Taux Ristourne 4 (%)', default=3.5)
 
     def calculate_escompte(self):
         """Calcule et applique l'escompte pour le client."""
@@ -16,15 +27,28 @@ class ResPartner(models.Model):
             invoices = self.env['account.move'].search([
                 ('partner_id', '=', partner.id),
                 ('state', '=', 'posted'),
-                ('invoice_date_due', '<=', fields.Date.end_of(fields.Date.today(), 'month')),
+                ('invoice_date_due', '<=', fields.Date.today())
+                #('invoice_date_due', '<=', fields.Date.end_of(fields.Date.today(), 'month')),
                 ('payment_state', '=', 'paid')
             ])
             total_paid = sum(invoices.mapped('amount_total'))
 
-            if total_paid >= partner.escompte_limit:
-                escompte = total_paid * (partner.escompte_rate / 100)
-                ristourne = total_paid * (partner.ristourne_rate / 100)
-                # Appliquer les réductions
+             # Appliquer les taux selon les limites atteintes
+            if total_paid >= partner.limit_4:
+                escompte = total_paid * (partner.escompte_rate_1 / 100)
+                ristourne = total_paid * (partner.ristourne_rate_1 / 100)
+            elif total_paid >= partner.limit_3:
+                escompte = total_paid * (partner.escompte_rate_3 / 100)
+                ristourne = total_paid * (partner.ristourne_rate_3 / 100)
+            elif total_paid >= partner.limit_2:
+                escompte = total_paid * (partner.escompte_rate_2 / 100)
+                ristourne = total_paid * (partner.ristourne_rate_2 / 100)
+            elif total_paid >= partner.limit_1:
+                escompte = total_paid * (partner.escompte_rate_1 / 100)
+                ristourne = total_paid * (partner.ristourne_rate_1 / 100)
+            else:
+                escompte = ristourne = 0
+                # Appliquer les réductions 
                 partner.credit += escompte + ristourne
 
     @api.model

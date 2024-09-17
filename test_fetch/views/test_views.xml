@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="test_template" name="Template de TEST">
+        <t t-call="website.layout">
+        <div class="container">
+            <div class="shadow text-center p-5 my-4">
+                <form action="" method='get'>
+                    <div class="form-group">
+                        <label for="Name" name="Nom:"></label>
+                        <input class="form-control" type="text" name="Nom"/>
+                        <button onclick='onclikCharger()' class="btn btn-primary mt-3">Charger</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </t>
+    </template>
+</odoo>

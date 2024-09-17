@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <odoo>
     <template id="reclamation_form" name="Reclamation Form">
         <t t-call="website.layout">
@@ -33,7 +34,7 @@
                     <!-- Numéro de facture -->
                     <div class="form-group">
                         <label for="invoice_number">N° de Facture</label>
-                        <input type="text" name="invoice_number" id="invoice_number" class="form-control"
+                        <input type="text" name="invoice_number" id="invoice_number" class="form-control" pl
                                required="required" t-att-value="invoice_number"/>
                     </div>
 
