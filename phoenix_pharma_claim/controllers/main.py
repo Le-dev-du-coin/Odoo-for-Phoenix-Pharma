@@ -3,7 +3,9 @@ from odoo.http import request
 
 
 class ClaimController(http.Controller):
-    #  Vue pour afficher les reclamations
+    # -------------------------------------------
+    #  Claim show view
+    # -------------------------------------------
     @http.route('/reclamation/vos-reclamations', type='http', auth='user', website=True)
     def reclamation_website_view(self, **kw):
         user_id = request.env.user.id
@@ -14,13 +16,17 @@ class ClaimController(http.Controller):
         }
         return request.render('phoenix_pharma_claim.reclamation_view_template', context)
 
-    # Vue pour creer une reclamation
+    # -----------------------------------------
+    # Claim create view
+    # -----------------------------------------
     @http.route('/reclamation/creer', type='http', auth='user', website=True)
     def reclamation_form(self, **kw):
         return request.render('phoenix_pharma_claim.reclamation_form')
 
-    # Route pour récupérer les produits liés à une facture via AJAX
-    @http.route('/get_invoice_products', type='json', auth='public', methods=['GET'], website=True)
+    # ---------------------------------------------------------------
+    # Route for get invoices's products via AJAX
+    # ---------------------------------------------------------------
+    @http.route('/get_invoice_products', type='json', auth='user', methods=['GET'], website=True)
     def get_invoice_products(self, invoice_number=None):
         if not invoice_number:
             print('Numéro de facture manquant')
@@ -36,7 +42,9 @@ class ClaimController(http.Controller):
         print(product_data)
         return {'products': product_data}
 
-
+    # ----------------------------------------------------------------
+    # Route for submiting a claim form
+    # ----------------------------------------------------------------
     @http.route('/submit/reclamation', type='http', auth='user', methods=['POST'], website=True)
     def submit_reclamation(self, **kwargs):
         reason = kwargs.get('reason')
@@ -48,7 +56,7 @@ class ClaimController(http.Controller):
         if isinstance(selected_product_ids, str):
             selected_product_ids = [int(pid) for pid in selected_product_ids.split(',')]
 
-        # Recherche de la facture
+        # find invoice
         if not selected_product_ids and invoice_number:
             invoice = request.env['account.move'].sudo().search([('name', '=', invoice_number)], limit=1)
             if invoice:
@@ -63,7 +71,7 @@ class ClaimController(http.Controller):
                 }
                 return request.render('phoenix_pharma_claim.reclamation_form', context)
 
-        # Création de la réclamation
+        # create new claim
         if selected_product_ids:
             claim = request.env['reclamation'].sudo().create({
                 'reason': reason,
