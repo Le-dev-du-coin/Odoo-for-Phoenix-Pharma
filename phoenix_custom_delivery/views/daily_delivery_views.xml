@@ -9,7 +9,6 @@
             <tree string="Récapitulatif de Livraison">
             <field name="name"/>
             <field name="delivery_date"/>
-            <field name="state"/>
         </tree>
         </field>
     </record>
@@ -29,17 +28,19 @@
                     <field name="delivery_ids">
                         <tree editable="bottom">
                             <field name="pharmacie"/>
+                            <field name="address"/>
+                            <field name="phone_number"/>
+                            <field name="invoice_number"/>
+                            <field name="amount"/>
+                            <field name="colis_number"/>
                             <field name="deliveryman"/>
-                            <field name="commentaire"/>
-                            <field name="delivery_date"/>
+                            <field name="departure_time"/>
+                            <field name="comment"/>
+                            <field name="signature"/>
                         </tree>
                     </field>
                 </group>
             </sheet>
-            <footer>
-                <button name="action_confirm" string="Confirmer" type="object" class="btn-primary"/>
-                <button name="action_done" string="Terminer" type="object" class="btn-secondary"/>
-            </footer>
         </form>
         </field>
     </record>
@@ -52,8 +53,7 @@
             <search>
                 <group expand="1" string="Group By">
                     <filter string="Nom" name="name" domain="[]" context="{'group_by':'name'}"/>
-                    <filter string="Date" name="delivery_date" domain="[]" context="{'group_by':'delivery_date'}"/>
-                    <filter string="État" name="state" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Date de livraison" name="delivery_date" domain="[]" context="{'group_by':'delivery_date'}"/>
                 </group>
             </search>
         </field>

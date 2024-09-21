@@ -3,21 +3,22 @@
     <!-- Menu Root for Delivery -->
     <menuitem id="menu_delivery_root" 
               name="Gestion des livraisons" 
-              sequence="1"/>
+              sequence="1"
+              web_icon="phoenix_custom_delivery,static/description/icon.svg?color=rgba(0,123,255,1.0)"/>
 
-    <!-- Submenu for Deliveries (Livraisons) -->
+    <!-- Submenu for Deliveries (Recapitulatif de Livraison) -->
     <menuitem id="menu_daily_delivery" 
-              name="Récapitulatif de Livraison" 
+              name="Recapitulatif de Livraison" 
               parent="menu_delivery_root" 
-              action="action_daily_delivery" 
-              sequence="20"/>
+              action="action_daily_delivery"
+              sequence="5"/>
 
-    <!-- Submenu for Deliveries (Livraisons) -->
+    
+    <!-- Submenu for Deliveryman (Livreurs) -->
     <menuitem id="menu_deliveryman" 
               name="Livreurs" 
               parent="menu_delivery_root" 
               action="action_model_deliveryman" 
               sequence="10"/>
-
 
 </odoo>

@@ -4,7 +4,7 @@
     'summary': 'Gestion des escomptes et ristournes sur les factures client',
     'author': 'Social 360',
     'category': 'Accounting',
-    'lincense': 'AGPL-3',
+    'license': 'LGPL-3',
     'depends': ['base', 'account', 'sale', 'contacts'],  # Dépend des modules Comptabilité et Vente
     'data': [
         #'data/fields.xml',

@@ -1,4 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 phoenix_custom_delivery.access_model_delivery,access_model_delivery,phoenix_custom_delivery.model_model_delivery,base.group_user,1,1,1,1
 phoenix_custom_delivery.access_model_deliveryman,access_model_deliveryman,phoenix_custom_delivery.model_model_deliveryman,base.group_user,1,1,1,1
-access_daily_delivery_manager,daily_delivery_manager,model_daily_delivery,,1,1,1,1
+phoenix_custom_delivery.access_daily_delivery,access_daily_delivery,phoenix_custom_delivery.model_daily_delivery,base.group_user,1,1,1,1

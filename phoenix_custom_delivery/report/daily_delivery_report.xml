@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="phoenix_paperformat_landscape" model="report.paperformat">
+        <field name="name">Paysage Personnalisé</field>
+        <field name="format">A4</field>
+        <!-- <field name="page_height">210</field>
+        <field name="page_width">297</field> -->
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">50</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+    </record>
+
+    <!-- Action Report Definition -->
+    <record id="report_daily_delivery" model="ir.actions.report">
+        <field name="name">Livraison Journaliere</field>
+        <field name="model">daily.delivery</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">phoenix_custom_delivery.report_daily_delivery_view</field>
+        <field name="report_file">phoenix_custom_delivery.report_daily_delivery</field>
+        <field name="print_report_name">'Récapitulatif de Livraison - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_daily_delivery"/>
+        <field name="binding_type">report</field>
+        <!-- Utilisation d'un format de papier en mode paysage -->
+        <field name="paperformat_id" ref="phoenix_paperformat_landscape"/>
+    </record>
+
+    <!-- Template Report -->
+    <template id="report_daily_delivery_view">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Title of the report -->
+                        <h2 class="text-center text-uppercase" style="color:rgba(76,179,12,255);">Récapitulatif de Livraison - <span t-esc="doc.name"/></h2>
+                        <p>Date : <span t-esc="doc.delivery_date"/></p>
+
+                        <!-- Table for deliveries -->
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Pharmacie</th>
+                                    <th>Adresse</th>
+                                    <th>N° Téléphone</th>
+                                    <th>N° Facture</th>
+                                    <th>Livreur</th>
+                                    <th>Heure de départ</th>
+                                    <th>Commentaires</th>
+                                    <th>Signatures</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <t t-set="number" t-value="0"/>
+                                <!-- Loop through delivery_ids to display each delivery -->
+                                <tr t-foreach="doc.delivery_ids" t-as="delivery">
+                                <t t-set="number" t-value="number + 1"/>
+                                    <td>
+                                        <span t-esc="number"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.pharmacie.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.address"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.phone_number"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.invoice_number"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.amount"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.colis_number"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.deliveryman.full_name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.departure_time"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.comment"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="delivery.signature"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

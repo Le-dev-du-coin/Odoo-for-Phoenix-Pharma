@@ -14,7 +14,7 @@
         </field>
     </record>
 
-    <!-- View model.delivery form -->
+    <!-- View model.delivery form
     <record id="view_model_delivery_form" model="ir.ui.view">
         <field name="name">view.model.delivery.form</field>
         <field name="model">model.delivery</field>
@@ -40,7 +40,7 @@
                 </sheet>
             </form>
         </field>
-    </record>
+    </record> -->
 
     <!-- View model.delivery search -->
     <record id="view_model_delivery_search" model="ir.ui.view">
