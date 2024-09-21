@@ -22,16 +22,31 @@ class ResPartner(models.Model):
 
     def calculate_escompte(self):
         """Calcule et applique l'escompte pour le client."""
+        today = fields.Date.today()
+        #first_day_of_month = today.replace(day=1)
+        #report = self.env['escompte.ristourne.report'].search([('month', '=', first_day_of_month)], limit=1)
+        report = self.env['escompte.ristourne.report'].search([('day', '=', today)], limit=1)
+        if not report:
+            report = self.env['escompte.ristourne.report'].create({
+                'month': first_day_of_month,
+                'total_invoices': 0,
+                'total_amount': 0,
+                'total_escompte': 0,
+                'total_ristourne': 0,
+                'currency_id': self.env.company.currency_id.id
+            })
+
         for partner in self:
             # Total des factures payées avant la fin du mois
             invoices = self.env['account.move'].search([
                 ('partner_id', '=', partner.id),
                 ('state', '=', 'posted'),
-                ('invoice_date_due', '<=', fields.Date.today())
-                #('invoice_date_due', '<=', fields.Date.end_of(fields.Date.today(), 'month')),
+                ('invoice_date_due', '<=', today),
+                #('invoice_date_due', '<=', fields.Date.today()),
                 ('payment_state', '=', 'paid')
             ])
             total_paid = sum(invoices.mapped('amount_total'))
+            escompte = ristourne = 0
 
              # Appliquer les taux selon les limites atteintes
             if total_paid >= partner.limit_4:
@@ -48,8 +63,12 @@ class ResPartner(models.Model):
                 ristourne = total_paid * (partner.ristourne_rate_1 / 100)
             else:
                 escompte = ristourne = 0
-                # Appliquer les réductions 
-                partner.credit += escompte + ristourne
+               
+
+            report.total_invoices += len(invoices)
+            report.total_amount += total_paid
+            report.total_escompte += escompte
+            report.total_ristourne += ristourne
 
     @api.model
     def apply_monthly_discounts(self):
@@ -57,10 +76,3 @@ class ResPartner(models.Model):
         customers = self.search([])
         for customer in customers:
             customer.calculate_escompte()
-
-
-class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    escompte_applied = fields.Boolean(string="Escompte Appliqué", default=False)
-    ristourne_applied = fields.Boolean(string="Ristourne Appliquée", default=False)

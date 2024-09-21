@@ -43,8 +43,10 @@
                                     <th>N°</th>
                                     <th>Pharmacie</th>
                                     <th>Adresse</th>
-                                    <th>N° Téléphone</th>
+                                    <th>Téléphone</th>
                                     <th>N° Facture</th>
+                                    <th>Montant(CFA)</th>
+                                    <th>Nbre de colis</th>
                                     <th>Livreur</th>
                                     <th>Heure de départ</th>
                                     <th>Commentaires</th>
@@ -65,14 +67,14 @@
                                     <td>
                                         <span t-esc="delivery.address"/>
                                     </td>
-                                    <td>
+                                    <td width="100px">
                                         <span t-esc="delivery.phone_number"/>
                                     </td>
-                                    <td>
+                                    <td width="100px">
                                         <span t-esc="delivery.invoice_number"/>
                                     </td>
                                     <td>
-                                        <span t-esc="delivery.amount"/>
+                                        <span t-esc="delivery.amount" widget="monetary"/>
                                     </td>
                                     <td>
                                         <span t-esc="delivery.colis_number"/>

@@ -1,35 +1,103 @@
 <odoo>
-    <!-- Menu principal pour Escompte et Ristourne -->
-    <menuitem id="menu_escompte_ristourne" 
-              name="Escompte et Ristourne" 
-              parent="account.menu_finance"/>
+    <data>
+        <!-- Menu principal pour Escompte et Ristourne -->
+        <menuitem id="menu_escompte_ristourne_root" 
+                  name="Escompte et Ristourne" 
+                  parent="account.menu_finance"
+                  sequence="10"/>
 
-    <!-- Action pour afficher les escomptes -->
-    <record id="action_escompte" model="ir.actions.act_window">
-        <field name="name">Escomptes</field>
-        <field name="res_model">account.move</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_escompte_list"/>
-        <field name="domain">[('escompte_applied', '=', True)]</field>
-    </record>
+        <!-- VUE pour les escomptes -->
+        <record id="view_escompte_list" model="ir.ui.view">
+            <field name="name">escompte.list</field>
+            <field name="model">escompte.ristourne.report</field>
+            <field name="arch" type="xml">
+                <tree string="Rapport des Escomptes">
+                    <field name="month"/>
+                    <field name="total_invoices" string="Nombre de factures"/>
+                    <field name="total_amount" string="Montant total des factures"/>
+                    <field name="total_escompte" string="Montant total des escomptes"/>
+                </tree>
+            </field>
+        </record>
 
-    <!-- Menu pour les escomptes -->
-    <menuitem id="menu_escompte" 
-              name="Escomptes" 
-              parent="menu_escompte_ristourne" 
-              action="action_escompte"/>
+        <record id="view_escompte_form" model="ir.ui.view">
+            <field name="name">escompte.form</field>
+            <field name="model">escompte.ristourne.report</field>
+            <field name="arch" type="xml">
+                <form string="Détail Escompte">
+                    <sheet>
+                        <group>
+                            <field name="month"/>
+                            <field name="total_invoices"/>
+                            <field name="total_amount"/>
+                            <field name="total_escompte"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-    <!-- Action pour afficher les ristournes -->
-    <record id="action_ristourne" model="ir.actions.act_window">
-        <field name="name">Ristournes</field>
-        <field name="res_model">account.move</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('ristourne_applied', '=', True)]</field>
-    </record>
+        <!-- Action pour afficher les escomptes -->
+        <record id="action_escompte" model="ir.actions.act_window">
+            <field name="name">Rapport Escomptes</field>
+            <field name="res_model">escompte.ristourne.report</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_escompte_list"/>
+            <field name="domain">[('total_escompte', '&gt;', 0)]</field> <!-- Affiche seulement les enregistrements avec des escomptes -->
+        </record>
 
-    <!-- Menu pour les ristournes -->
-    <menuitem id="menu_ristourne" 
-              name="Ristournes" 
-              parent="menu_escompte_ristourne" 
-              action="action_ristourne"/>
+        <!-- Menu pour les escomptes -->
+        <menuitem id="menu_escompte" 
+                  name="Escomptes" 
+                  parent="menu_escompte_ristourne_root" 
+                  action="action_escompte"
+                  sequence="20"/>
+
+        <!-- VUE pour les ristournes -->
+        <record id="view_ristourne_list" model="ir.ui.view">
+            <field name="name">ristourne.list</field>
+            <field name="model">escompte.ristourne.report</field>
+            <field name="arch" type="xml">
+                <tree string="Rapport des Ristournes">
+                    <field name="month"/>
+                    <field name="total_invoices" string="Nombre de factures"/>
+                    <field name="total_amount" string="Montant total des factures"/>
+                    <field name="total_ristourne" string="Montant total des ristournes"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ristourne_form" model="ir.ui.view">
+            <field name="name">ristourne.form</field>
+            <field name="model">escompte.ristourne.report</field>
+            <field name="arch" type="xml">
+                <form string="Détail Ristourne">
+                    <sheet>
+                        <group>
+                            <field name="month"/>
+                            <field name="total_invoices"/>
+                            <field name="total_amount"/>
+                            <field name="total_ristourne"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action pour afficher les ristournes -->
+        <record id="action_ristourne" model="ir.actions.act_window">
+            <field name="name">Rapport Ristournes</field>
+            <field name="res_model">escompte.ristourne.report</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ristourne_list"/>
+            <field name="domain">[('total_ristourne', '&gt;', 0)]</field> <!-- Affiche seulement les enregistrements avec des ristournes -->
+        </record>
+
+        <!-- Menu pour les ristournes -->
+        <menuitem id="menu_ristourne" 
+                  name="Ristournes" 
+                  parent="menu_escompte_ristourne_root" 
+                  action="action_ristourne"
+                  sequence="30"/>
+    </data>
 </odoo>

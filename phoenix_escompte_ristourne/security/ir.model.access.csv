@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+phoenix_escompte_ristourne.access_escompte_ristourne_report,access_escompte_ristourne_report,phoenix_escompte_ristourne.model_escompte_ristourne_report,base.group_user,1,0,0,0

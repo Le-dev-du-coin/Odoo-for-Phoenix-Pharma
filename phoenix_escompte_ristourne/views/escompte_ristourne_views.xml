@@ -33,7 +33,7 @@
         </field>
     </record>
 
-    <record id="view_escompte_list" model="ir.ui.view">
+    <!-- <record id="view_escompte_list" model="ir.ui.view">
         <field name="name">escompte.list</field>
         <field name="model">account.move</field>
         <field name="arch" type="xml">
@@ -45,5 +45,5 @@
                 <field name="ristourne_applied"/>
             </tree>
         </field>
-    </record>
+    </record> -->
 </odoo>
