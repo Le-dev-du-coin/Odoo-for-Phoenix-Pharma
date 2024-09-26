@@ -6,20 +6,16 @@
             <div class="container">
                 <h1 class=" text-center text-primary my-3">Vos reclamations</h1>
 
-                <table class="table table-responsive table-secondary-striped">
+                <table class="table table-bordered table-responsive table-secondary-striped">
                     <thead>
-                        <th>Reference</th>
                         <th>Date de creation</th>
-                        <th>N Facture</th>
+                        <th>N° Facture</th>
                         <th>Statut</th>
                         <th>Date cloture</th>
                     </thead>
                     <tbody>
                         <t t-foreach="claim" t-as="reclamation">
                             <tr>
-                                <td>
-
-                                </td>
                                 <td>
                                     <t t-esc="reclamation.open_date"/>
                                 </td>

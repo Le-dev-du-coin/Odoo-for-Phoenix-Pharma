@@ -7,15 +7,14 @@
             <div class="container">
                 <h1 class="text-primary text-center my-4">Vos Commandes</h1>
                 <table class="table table-bordered">
-                    <thead>
+                    <thead class="bg-secondary text-white text-center">
                         <tr>
                             <th>Commande</th>
                             <th>Date</th>
                             <th>Montant Total</th>
-                            <th>État</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <t t-foreach="orders" t-as="order">
                             <tr>
                                 <td>
@@ -25,11 +24,7 @@
                                     <t t-esc="order.date_order"/>
                                 </td>
                                 <td>
-                                    <t t-esc="order.amount_total"/>
-                                    €
-                                </td>
-                                <td>
-                                    <t t-esc="order.state"/>
+                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
                                 </td>
                             </tr>
                         </t>
@@ -45,15 +40,14 @@
             <div class="container">
                 <h1 class="text-primary text-center my-4">Commandes Extranet</h1>
                 <table class="table table-bordered">
-                    <thead>
+                    <thead class="bg-secondary text-white text-center">
                         <tr>
                             <th>Commande</th>
                             <th>Date</th>
                             <th>Montant Total</th>
-                            <th>État</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <t t-foreach="extranet_orders" t-as="order">
                             <tr>
                                 <td>
@@ -63,12 +57,9 @@
                                     <t t-esc="order.date_order"/>
                                 </td>
                                 <td>
-                                    <t t-esc="order.amount_total"/>
-                                    €
+                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
                                 </td>
-                                <td>
-                                    <t t-esc="order.state"/>
-                                </td>
+
                             </tr>
                         </t>
                     </tbody>
@@ -82,16 +73,15 @@
         <t t-call="website.layout">
             <div class="container">
                 <h1 class="text-primary text-center my-4">Préparation en Cours</h1>
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-secondary text-white text-center">
                         <tr>
                             <th>Commande</th>
                             <th>Date</th>
                             <th>Montant Total</th>
-                            <th>État</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <t t-foreach="pending_orders" t-as="order">
                             <tr>
                                 <td>
@@ -101,11 +91,7 @@
                                     <t t-esc="order.date_order"/>
                                 </td>
                                 <td>
-                                    <t t-esc="order.amount_total"/>
-                                    €
-                                </td>
-                                <td>
-                                    <t t-esc="order.state"/>
+                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
                                 </td>
                             </tr>
                         </t>

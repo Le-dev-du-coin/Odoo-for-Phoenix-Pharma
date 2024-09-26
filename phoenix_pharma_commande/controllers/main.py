@@ -1,4 +1,3 @@
-from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo import http
 from odoo.http import request
 
@@ -51,21 +50,3 @@ class CommandControllers(http.Controller):
             'pending_orders': pending_orders,
         }
         return request.render('phoenix_pharma_commande.preparation_en_cours', context)
-
-
-class WebsiteSaleInherit(WebsiteSale):
-
-    def confirm_order(self, **post):
-        # Appeler la méthode parent pour maintenir le processus standard
-        response = super(WebsiteSaleInherit, self).confirm_order(**post)
-
-        # Récupérer la commande active du panier
-        order = request.website.sale_get_order()
-
-        # Vérifier si la commande existe et est confirmée
-        if order and order.state == 'sale':
-            order.sale_channel = 'ecommerce'
-            print('Sale channel set to:', order.sale_channel)
-
-        return response
-

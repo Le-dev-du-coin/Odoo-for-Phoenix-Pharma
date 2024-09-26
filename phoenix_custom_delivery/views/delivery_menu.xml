@@ -4,7 +4,7 @@
     <menuitem id="menu_delivery_root" 
               name="Gestion des livraisons" 
               sequence="1"
-              web_icon="phoenix_custom_delivery,static/description/icon.svg?color=rgba(0,123,255,1.0)"/>
+              web_icon="phoenix_custom_delivery,static/description/icon.svg"/>
 
     <!-- Submenu for Deliveries (Recapitulatif de Livraison) -->
     <menuitem id="menu_daily_delivery" 

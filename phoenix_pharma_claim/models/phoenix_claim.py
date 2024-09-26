@@ -34,24 +34,10 @@ class PhoenixClaim(models.Model):
     ], string='Statut', default='draft')
     closure_date = fields.Datetime(string='Date de Clôture')
 
-    @api.onchange('state')
-    def _onchange_status(self):
-        if self.state == 'closed':
-            self.closure_date = fields.Datetime.now()
 
-    # @api.constrains('state')
-    # def _check_edit_permissions(self):
-    #     for rec in self:
-    #         if rec.state == 'closed' and self.env.user.has_group('base.group_user'):
-    #             raise ValidationError("Vous ne pouvez pas modifier une réclamation qui est fermée.")
-
-    @api.model
-    def create(self, vals):
-        if vals.get('state') == 'closed':
-            vals['closure_date'] = fields.Datetime.now()
-        return super(Claim, self).create(vals)
-
-    # def write(self, vals):
-    #     if self.state == 'closed' and vals.get('state') != 'closed':
-    #         raise ValidationError("Vous ne pouvez pas modifier une réclamation qui est fermée.")
-    #     return super(Claim, self).write(vals)
+    def action_change_status(self, new_state):
+        """Changement du statut pour plusieurs réclamations."""
+        for record in self:
+            record.state = new_state
+            if new_state == 'closed':
+                record.closure_date = fields.Datetime.now()

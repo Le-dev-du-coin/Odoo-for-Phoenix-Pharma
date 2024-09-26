@@ -12,15 +12,14 @@
         'views/extranet/reclamation_template.xml',
         'views/extranet/reclamation_thankyou.xml',
         'views/reclamation_view.xml',
-        # #'views/reclamation_menu.xml',
         'security/ir.model.access.csv',
         # #'security/security.xml',
     },
-    'assets': {
-        'web.assets_frontend': [
-            'phoenix_pharma_claim/static/src/js/claim.js',
-        ],
-    },
+    # 'assets': {
+    #     'web.assets_frontend': [
+    #         'phoenix_pharma_claim/static/src/js/claim.js',
+    #     ],
+    # },
     'installable': True,
     'application': False,
     'auto_install': False

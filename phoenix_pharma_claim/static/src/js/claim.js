@@ -1,19 +1,16 @@
 //odoo.define('phoenix_pharma_claim.claim_functions', function (require) {
 //    "use strict";
-
-const baseUrl = window.location.pathname;
-
-// Fonction pour récupérer les produits associés à une facture
+  // Fonction pour récupérer les produits associés à une facture
 async function fetchInvoiceProducts(invoiceNumber) {
   let url =`/get_invoice_products?invoice_number=${invoiceNumber}`;
-  console.log("URL:", url);
   
   try {
     const response = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({invoice_number: invoiceNumber}),
     });
 
     // Vérifiez si la réponse est correcte
@@ -23,11 +20,18 @@ async function fetchInvoiceProducts(invoiceNumber) {
 
     // Récupérer les données JSON
     const data = await response.json();
+    console.log('Donnee recu:', data)
 
     // Appeler la fonction pour afficher les produits
-    displayProducts(data.products);
+    if (data.result && data.result.products){
+      console.log(data.result.products)
+      displayProducts(data.result.products);
+    } else {
+      console.error("Aucun champ 'products' dans la réponse :", data);
+      alert("Aucun produit trouvé pour cette facture.");
+    }
   } catch (error) {
-    console.error("Erreur lors de la récupération sdes produits:", error);
+    console.error("Erreur lors de la récupération des produits:", error);
     alert("Erreur lors de la récupération des produits.");
   }
 }
@@ -50,7 +54,7 @@ function displayProducts(products) {
   products.forEach(function (product) {
     const option = document.createElement("option");
     option.value = product.id;
-    option.textContent = product.name;
+    option.textContent = `${product.product_name}`;
     productsSelect.appendChild(option);
   });
 
@@ -63,6 +67,7 @@ function displayProducts(products) {
 async function submitClaimForm() {
   const form = document.getElementById("reclamationForm");
   const formData = new FormData(form);
+  console.log(formData)
 
   try {
     const response = await fetch("/submit/reclamation", {
@@ -71,8 +76,8 @@ async function submitClaimForm() {
     });
 
     if (response.ok) {
-      document.body.innerHTML = await response.text(); // Remplacer le contenu de la page par la page de
-      confirmation;
+      console.log('success'); 
+      window.location.href= '/reclamation/thanks'
     } else {
       alert("Erreur lors de la soumission de la réclamation.");
     }
@@ -100,6 +105,8 @@ document
   .getElementById("reclamationForm")
   .addEventListener("submit", function (event) {
     event.preventDefault(); // Empêcher le rechargement de la page
+
     submitClaimForm(); // Soumettre le formulaire via AJAX
   });
+  document.getElementById("find_invoice_btn").addEventListener("click", onFindInvoice);
 //});

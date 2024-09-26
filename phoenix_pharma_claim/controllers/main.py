@@ -1,5 +1,6 @@
 from odoo import http
 from odoo.http import request
+import json
 
 
 class ClaimController(http.Controller):
@@ -26,21 +27,44 @@ class ClaimController(http.Controller):
     # ---------------------------------------------------------------
     # Route for get invoices's products via AJAX
     # ---------------------------------------------------------------
-    @http.route('/get_invoice_products', type='json', auth='user', methods=['GET'], website=True)
+    @http.route('/get_invoice_products', type='json', auth='user', methods=['POST'], website=True)
     def get_invoice_products(self, invoice_number=None):
-        if not invoice_number:
-            print('Numéro de facture manquant')
-            return {'error': 'Numéro de facture manquant'}
+        try:
+            data = json.loads(request.httprequest.data)
 
-        invoice = request.env['account.move'].sudo().search([('name', '=', invoice_number)], limit=1)
-        
-        if not invoice:
-            return {'error': 'Aucune facture trouvée pour ce numéro'}
+            invoice_number = data.get('invoice_number')
+            
+            if not invoice_number:
+                return {
+                    'error': 'Numéro de facture manquant'
+                }
+            
+            invoice = request.env['account.move'].sudo().search([('name', '=', invoice_number)], limit=1)
+            
+            if not invoice:
+                return {
+                    'error': 'Aucune facture trouvée pour ce numéro'
+                }
 
-        products = invoice.invoice_line_ids.mapped('product_id')
-        product_data = [{'id': product.id, 'name': product.name} for product in products]
-        print(product_data)
-        return {'products': product_data}
+            invoice_products = []
+            for line in invoice.invoice_line_ids:
+                invoice_products.append({
+                    'id': line.product_id.id,
+                    'product_name': line.product_id.name,
+                    'quantity': line.quantity,
+                    'price_unit': line.price_unit,
+                    'subtotal': line.price_subtotal,
+                })
+            return {
+                    'invoice_number': invoice.name,
+                    'customer': invoice.partner_id.name,
+                    'products': invoice_products
+                }
+
+        except json.JSONDecodeError:
+            return {
+                'error': 'Format JSON incorrect'
+            }
 
     # ----------------------------------------------------------------
     # Route for submiting a claim form
@@ -50,11 +74,15 @@ class ClaimController(http.Controller):
         reason = kwargs.get('reason')
         invoice_number = kwargs.get('invoice_number')
         user_id = request.env.user.id
-        selected_product_ids = kwargs.get('selected_products', [])
+        selected_product_ids = request.httprequest.form.getlist('selected_products[]')  # Récupère tous les produits sous forme de liste
+        print(f"Produits sélectionnés : {selected_product_ids}") 
+        # selected_product_ids = kwargs.get('selected_products[]', [])
+      
         message = kwargs.get('message', '')
 
         if isinstance(selected_product_ids, str):
             selected_product_ids = [int(pid) for pid in selected_product_ids.split(',')]
+            print(selected_product_ids)
 
         # find invoice
         if not selected_product_ids and invoice_number:
@@ -73,7 +101,7 @@ class ClaimController(http.Controller):
 
         # create new claim
         if selected_product_ids:
-            claim = request.env['reclamation'].sudo().create({
+            claim = request.env['phoenix_claim'].sudo().create({
                 'reason': reason,
                 'invoice_number': invoice_number,
                 'selected_products': [(6, 0, selected_product_ids)],
@@ -81,7 +109,11 @@ class ClaimController(http.Controller):
                 'state': 'draft',
                 'message': message,
             })
-
-            return request.render('phoenix_pharma_claim.reclamation_thankyou')
+            return request.render('phoenix_pharma_claim.reclamation_thankyou') 
 
         return request.redirect('/submit/reclamation')
+
+    @http.route('/reclamation/thanks', type="http", auth="user", website=True)
+    def thankYou(self, **kwargs):
+        
+        return request.render('phoenix_pharma_claim.reclamation_thankyou') 

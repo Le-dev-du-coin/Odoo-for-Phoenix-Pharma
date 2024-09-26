@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <!-- <template id="claim_assets_frontend" inherit_id="web.assets_backend" name="Include HTMX Library">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="https://unpkg.com/htmx.org@2.0.2"></script>
-        </xpath>
-    </template> -->
-
     <template id="reclamation_form" name="Formulaire de Réclamation">
         <t t-call="website.layout">
             <div class="container">
-                <div class="shadow p-3 my-5 bg-body rounded-3">
+                <div class="shadow p-4 my-5 bg-body rounded-3">
                     <h1 class="text-center text-primary my-2">Creer une reclamation</h1>
                     <hr/>
                     <form id="reclamationForm" action="/submit/reclamation" method="post">
                         <div class="form-group mb-3">
                             <label class="control-label" for="reason">Motif de la réclamation</label>
                             <select class="form-control" id="reason" name="reason">
-                                <option>Produit facturé non livré</option>
-                                <option>Produit périmé</option>
-                                <option>Produit cassé</option>
-                                <option>Péremption Proche</option>
-                                <option>Produit Avarié</option>
-                                <option>Quantité facturée erronée</option>
-                                <option>Produit Trop Cher</option>
-                                <option>Retour Bon Etat</option>
-                                <option>Retour Bon Etat – Doublon Commande</option>
-                                <option>Retour Bon Etat – Erreur Commande</option>
-                                <option>Produit facturé différent de produit livré</option>
-                                <option>Produit livré en excédent</option>
-                                <option>Rappel de Lot</option>
+                                <option value="1">Produit facturé non livré</option>
+                                <option value="2">Produit périmé</option>
+                                <option value="3">Produit cassé</option>
+                                <option value="4">Péremption Proche</option>
+                                <option value="5">Produit Avarié</option>
+                                <option value="6">Quantité facturée erronée</option>
+                                <option value="7">Produit Trop Cher</option>
+                                <option value="8">Retour Bon Etat</option>
+                                <option value="9">Retour Bon Etat – Doublon Commande</option>
+                                <option value="10">Retour Bon Etat – Erreur Commande</option>
+                                <option value="11">Produit facturé différent de produit livré</option>
+                                <option value="12">Produit livré en excédent</option>
+                                <option value="13">Rappel de Lot</option>
                                 <!-- Ajouter d'autres options -->
                             </select>
                         </div>
@@ -38,13 +32,13 @@
                             <input class="form-control" type="text" id="invoice_number" name="invoice_number"/>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="button" onclick="onFindInvoice()">Trouver la Facture
+                            <button id="find_invoice_btn" class="btn btn-primary" type="button">Trouver la Facture
                             </button>
                         </div>
                         <!-- Produits affichés après la récupération via AJAX -->
                         <div class="form-group mb-3" id="products_div" style="display:none;">
                             <label for="selected_products">Produits</label>
-                            <select class="form-control" id="selected_products" name="selected_products"></select>
+                            <select class="form-control" id="selected_products" name="selected_products[]" multiple="multiple"></select>
                         </div>
 
                         <!-- Champ de message qui apparaît après la récupération des produits -->
@@ -55,12 +49,127 @@
 
                         <!-- Bouton de soumission, masqué jusqu'à ce que la facture soit trouvée -->
                         <div class="text-center">
-                            <button class="form-control" type="submit" id="submit_btn" style="display:none;">Soumettre
-                            </button>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
+                            <button class="btn btn-primary" type="submit" id="submit_btn" style="display:none;">Valider la reclamation</button>
                         </div>
                     </form>
                 </div>
             </div>
+            <script> 
+          // Fonction pour récupérer les produits associés à une facture
+            async function fetchInvoiceProducts(invoiceNumber) {
+              let url =`/get_invoice_products?invoice_number=${invoiceNumber}`;
+              
+              try {
+                const response = await fetch(url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({invoice_number: invoiceNumber}),
+                });
+
+                // Vérifiez si la réponse est correcte
+                if (!response.ok) {
+                  throw new Error("Erreur lors de la récupération des produits.");
+                }
+
+                // Récupérer les données JSON
+                const data = await response.json();
+                console.log('Donnee recu:', data)
+
+                // Appeler la fonction pour afficher les produits
+                if (data.result &amp;&amp; data.result.products){
+                  console.log(data.result.products)
+                  displayProducts(data.result.products);
+                } else {
+                  console.error("Aucun champ 'products' dans la réponse :", data);
+                  alert("Aucun produit trouvé pour cette facture.");
+                }
+              } catch (error) {
+                console.error("Erreur lors de la récupération des produits:", error);
+                alert("Erreur lors de la récupération des produits.");
+              }
+            }
+
+            // Fonction pour afficher les produits récupérés
+            function displayProducts(products) {
+              const productsDiv = document.getElementById("products_div");
+              const productsSelect = document.getElementById("selected_products");
+
+              productsSelect.innerHTML = ""; // Vider la liste existante
+
+              if (products.length === 0) {
+                productsDiv.style.display = "none";
+                alert("Aucun produit trouvé pour cette facture.");
+                return;
+              }
+
+              // Afficher les produits trouvés
+              productsDiv.style.display = "block";
+              products.forEach(function (product) {
+                const option = document.createElement("option");
+                option.value = product.id;
+                option.textContent = `${product.product_name}`;
+                productsSelect.appendChild(option);
+              });
+
+              // Afficher également le champ de message et le bouton de soumission
+              document.getElementById("message_field").style.display = "block";
+              document.getElementById("submit_btn").style.display = "block";
+            }
+
+            // Fonction pour soumettre le formulaire via AJAX
+            async function submitClaimForm() {
+              const form = document.getElementById("reclamationForm");
+              const formData = new FormData(form);
+               
+                for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);  // Affiche la clé et la valeur de chaque entrée
+                }
+
+    
+              try {
+                const response = await fetch("/submit/reclamation", {
+                  method: "POST",
+                  body: formData,
+                });
+
+                if (response.ok) {
+                  console.log('success'); 
+                  window.location.href= '/reclamation/thanks'
+                } else {
+                  alert("Erreur lors de la soumission de la réclamation.");
+                }
+              } catch (error) {
+                console.error("Erreur:", error);
+                alert("Erreur lors de la soumission de la réclamation.");
+              }
+            }
+
+            // Fonction appelée lors du clic sur le bouton "Trouver la Facture"
+            function onFindInvoice() {
+              const invoiceNumber = document.getElementById("invoice_number").value;
+
+              if (!invoiceNumber) {
+                alert("Veuillez entrer un numéro de facture valide.");
+                return;
+              }
+
+              // Récupérer et afficher les produits de la facture
+              fetchInvoiceProducts(invoiceNumber);
+            }
+
+            // Écouteur pour la soumission du formulaire
+            document
+              .getElementById("reclamationForm")
+              .addEventListener("submit", function (event) {
+                event.preventDefault(); // Empêcher le rechargement de la page
+
+                submitClaimForm(); // Soumettre le formulaire via AJAX
+              });
+              document.getElementById("find_invoice_btn").addEventListener("click", onFindInvoice);
+            </script>
         </t>
     </template>
 </odoo>

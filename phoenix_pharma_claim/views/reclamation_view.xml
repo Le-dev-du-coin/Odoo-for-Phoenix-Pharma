@@ -1,5 +1,17 @@
 <odoo>
     <!-- Définition de la vue -->
+    <record id="action_change_status" model="ir.actions.server">
+        <field name="name">Modifier Statut</field>
+        <field name="model_id" ref="model_phoenix_claim"/>
+        <field name="binding_model_id" ref="model_phoenix_claim"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                new_state = 'closed'  
+                records.action_change_status(new_state)
+        </field>
+    </record>
+
     <record id="view_reclamation_list" model="ir.ui.view">
         <field name="name">Liste des reclamations</field>
         <field name="model">phoenix_claim</field>
@@ -7,12 +19,13 @@
             <tree>
                 <field name="reason" readonly="1"/>
                 <field name="invoice_number" readonly="1"/>
-                <field name="selected_products" readonly="1"/>
+                <field name="selected_products" widget="many2many_tags" options="{'no_create': True}" readonly="1"/>
                 <field name="message" readonly="1"/>
                 <field name="user_id" readonly="1"/>
                 <field name="open_date" readonly="1"/>
                 <field name="state"/>
                 <field name="closure_date" readonly="1"/>
+                <button name="%(action_change_status)d" type="action" string="Modifier Statut" class="oe_highlight"/>
             </tree>
         </field>
     </record>
@@ -31,7 +44,7 @@
     </record>
 
     <!-- Définition des menus -->
-    <menuitem id="root_menu" name="Reclamation"/>
+    <menuitem id="root_menu" name="Reclamation" web_icon="phoenix_pharma_claim,static/description/icon.svg"/>
 
     <menuitem id="reclamation_menu"
               name="Voir les réclamations"
