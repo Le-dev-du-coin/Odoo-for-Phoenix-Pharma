@@ -7,9 +7,9 @@
         <field name="state">code</field>
         <field name="code">model.apply_monthly_discounts()</field>
         <field name="interval_number">1</field>
-        <field name="interval_type">month</field>
+        <field name="interval_type">months</field>
         <field name="numbercall">-1</field>
-        <field name="nextcall" eval="(DateTime.today() + relativedelta(day=31))"/>
+        <field name="nextcall" eval="(DateTime.now() + relativedelta(day=1, months=1))"/>
         <field name="active" eval="True"/>
     </record>
 </odoo>
