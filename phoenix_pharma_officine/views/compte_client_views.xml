@@ -8,102 +8,126 @@
                 margin-bottom: 20px;
                 }
 
+                .info-content ul {
+                    list-style-type: None;
+                }
+
                 .info-content p {
                 font-size: 16px;
                 color: #2b2b2b;
                 margin-bottom: 10px;
                 }
 
-                .info-content p span {
+                .info-content span {
                 font-weight: bold;
                 color: #29a744;
                 }
             </style>
             <div class="container">
-                <h2>Compte Client</h2>
-                <div class="dropdown-section">
-                    <select id="info-select" class="form-control">
-                        <option value="information">Informations generale</option>
-                        <option value="chiffre-affaire">Chiffre d'Affaires</option>
-                        <option value="remise">Remise</option>
-                        <option value="en-cours">En Cours</option>
-                        <option value="ristourne">Ristourne</option>
-                    </select>
-                </div>
+                <div style="height:70vh;">
+                    <h1 class="text-primary text-center my-3"> Bienvenue, dans votre Compte Client</h1>
+                    <div class="dropdown-section">
+                        <select id="info-select" class="form-control">
+                            <option value="information">Informations generale</option>
+                            <option value="chiffre-affaire">Chiffre d'Affaires</option>
+                            <option value="remise">Remise</option>
+                            <option value="en-cours">En Cours</option>
+                            <option value="ristourne">Ristourne</option>
+                        </select>
+                    </div>
 
-                <div id="content-area">
-                    <div id="information" class="info-content">
-                        <p>Information generale:
+                    <div id="content-area">
+                        <div id="information" class="info-content">
+                            <h4>
+                                <p>Information generale:</p>
+                            </h4>
                             <span>
-<!--                                <ul>-->
-<!--                                    <li>-->
-<!--                                        <strong>Nom :</strong>-->
-<!--                                        <t t-esc="company.name"/>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <strong>Adresse :</strong>-->
-<!--                                        <t t-esc="company.street"/>-->
-<!--                                        <t t-esc="company.city"/>-->
-<!--                                        <t t-esc="company.zip"/>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <strong>Pays :</strong>-->
-<!--                                        <t t-esc="company.country_id.name"/>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <strong>Téléphone :</strong>-->
-<!--                                        <t t-esc="company.phone"/>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <strong>Email :</strong>-->
-<!--                                        <t t-esc="company.email"/>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
+                                <ul>
+                                    <li>
+                                        <p>
+                                            <span>Pharmacie :</span> <t t-esc="pharmacie.name"/>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Adresse :</span> <t t-esc="pharmacie.street"/> - <t t-esc="pharmacie.city"/> 
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Pays :</span> <t t-esc="pharmacie.country_id.name"/>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Téléphone :</span> <t t-esc="pharmacie.phone"/>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <span>Email :</span>  <t t-esc="pharmacie.email"/>
+                                        </p>
+                                    </li>
+                                </ul>
                             </span>
-                        </p>
-                    </div>
-                    <div id="chiffre-affaire" class="info-content"  style="display: none;">
-                        <p>Chiffre d'Affaire du Mois:
-                            <span>
-                                <t t-esc="chiffre_affaire_mois"/>
-                            </span>
-                        </p>
-                        <p>Chiffre d'Affaire en cours de facturation:
-                            <span>
-                                <t t-esc="chiffre_affaire_cours"/>
-                            </span>
-                        </p>
-                        <p>Chiffre d'Affaire du Mois l'année précédente:
-                            <span>
-                                <t t-esc="chiffre_affaire_annee_precedente"/>
-                            </span>
-                        </p>
-                        <p>Évolution en %:
-                            <span>
-                                <t t-esc="evolution_pourcentage"/>
-                            </span>
-                        </p>
-                    </div>
-                    <div id="remise" class="info-content" style="display: none;">
-                        <p>Remise:
-                            <span>
-                                <t t-esc="remise"/>
-                            </span>
-                        </p>
-                    </div>
-                    <div id="en-cours" class="info-content" style="display: none;">
-                        <p>En Cours:
-                            <span>
-                                <t t-esc="en_cours"/>
-                            </span>
-                        </p>
-                    </div>
-                    <div id="ristourne" class="info-content" style="display: none;">
-                        <p>Ristourne:
-                            <span>
-                                <t t-esc="ristourne"/>
-                            </span>
-                        </p>
+                        </div>
+                        <div id="chiffre-affaire" class="info-content" style="display: none;">
+                            <table class="table table-responsive table-striped mt-2">
+                                <tr>
+                                    <td>Chiffre d'Affaire du Mois:</td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="chiffre_affaire_mois" />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Chiffre d'Affaire en cours de facturation:</td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="chiffre_affaire_cours"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Chiffre d'Affaire du Mois l'année précédente:</td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="chiffre_affaire_annee_precedente"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Évolution en %:</td>
+                                    <td>
+                                        <span>
+                                            <t t-esc="evolution_pourcentage"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="remise" class="info-content" style="display: none;">
+                            <p>Remise:
+                                <span>
+                                    <t t-esc="remise"/>
+                                </span>
+                            </p>
+                        </div>
+                        <div id="en-cours" class="info-content" style="display: none;">
+                            <p>En Cours:
+                                <span>
+                                    <t t-esc="en_cours"/>
+                                </span>
+                            </p>
+                        </div>
+                        <div id="ristourne" class="info-content" style="display: none;">
+                            <p>Ristourne:
+                                <span>
+                                    <t t-esc="ristourne"/>
+                                </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

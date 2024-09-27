@@ -23,11 +23,12 @@ class ResPartner(models.Model):
     def calculate_escompte(self):
         """Calcule et applique l'escompte pour le client."""
         today = fields.Date.today()
-        #first_day_of_month = today.replace(day=1)
-        #report = self.env['escompte.ristourne.report'].search([('month', '=', first_day_of_month)], limit=1)
-        report = self.env['escompte.ristourne.report'].search([('day', '=', today)], limit=1)
+        first_day_of_month = today.replace(day=1)
+        report = self.env['escompte.ristourne.report'].search([('month', '=', first_day_of_month)], limit=1)
+        
         if not report:
             report = self.env['escompte.ristourne.report'].create({
+                'company_id': self.env.company.id,
                 'month': first_day_of_month,
                 'total_invoices': 0,
                 'total_amount': 0,
@@ -41,8 +42,7 @@ class ResPartner(models.Model):
             invoices = self.env['account.move'].search([
                 ('partner_id', '=', partner.id),
                 ('state', '=', 'posted'),
-                ('invoice_date_due', '<=', today),
-                #('invoice_date_due', '<=', fields.Date.today()),
+                ('invoice_date_due', '<=', fields.Date.today()),
                 ('payment_state', '=', 'paid')
             ])
             total_paid = sum(invoices.mapped('amount_total'))
@@ -50,8 +50,8 @@ class ResPartner(models.Model):
 
              # Appliquer les taux selon les limites atteintes
             if total_paid >= partner.limit_4:
-                escompte = total_paid * (partner.escompte_rate_1 / 100)
-                ristourne = total_paid * (partner.ristourne_rate_1 / 100)
+                escompte = total_paid * (partner.escompte_rate_4 / 100)
+                ristourne = total_paid * (partner.ristourne_rate_4 / 100)
             elif total_paid >= partner.limit_3:
                 escompte = total_paid * (partner.escompte_rate_3 / 100)
                 ristourne = total_paid * (partner.ristourne_rate_3 / 100)

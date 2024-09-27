@@ -12,7 +12,8 @@
             <field name="model">escompte.ristourne.report</field>
             <field name="arch" type="xml">
                 <tree string="Rapport des Escomptes">
-                    <field name="month"/>
+                    <field name="pharmacie_id" string="Pharmacie"/>
+                    <field name="month" string="Mois"/>
                     <field name="total_invoices" string="Nombre de factures"/>
                     <field name="total_amount" string="Montant total des factures"/>
                     <field name="total_escompte" string="Montant total des escomptes"/>
@@ -27,6 +28,7 @@
                 <form string="Détail Escompte">
                     <sheet>
                         <group>
+                            <field name="pharmacie_id"/>
                             <field name="month"/>
                             <field name="total_invoices"/>
                             <field name="total_amount"/>
@@ -59,7 +61,8 @@
             <field name="model">escompte.ristourne.report</field>
             <field name="arch" type="xml">
                 <tree string="Rapport des Ristournes">
-                    <field name="month"/>
+                    <field name="pharmacie_id" string="Pharmacie"/>
+                    <field name="month" string="Mois"/>
                     <field name="total_invoices" string="Nombre de factures"/>
                     <field name="total_amount" string="Montant total des factures"/>
                     <field name="total_ristourne" string="Montant total des ristournes"/>
@@ -74,6 +77,7 @@
                 <form string="Détail Ristourne">
                     <sheet>
                         <group>
+                            <field name="pharmacie_id"/>
                             <field name="month"/>
                             <field name="total_invoices"/>
                             <field name="total_amount"/>

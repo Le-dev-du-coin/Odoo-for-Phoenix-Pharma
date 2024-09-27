@@ -4,62 +4,127 @@
         <template id="template_factures" name="Factures">
             <t t-call="website.layout">
                 <div class="container">
-                    <h2>Mes Factures</h2>
-                    <table class="table table-striped">
-                        <thead>
+                    <h1 class="text-center text-primary my-3">Mes Factures</h1>
+                    <table class="table table-responsive table-striped">
+                        <thead class="bg-primary text-white">
                             <tr>
-                                <th>Numéro de Facture</th>
-                                <th>Date</th>
-                                <th>Montant Total</th>
+                                <th>N° Facture</th>
+                                <th>Date de facturation</th>
+                                <th>Date d'échéance</th>
+                                <th>Statut</th>
+                                <th>Montant dû</th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="factures" t-as="facture">
                                 <tr>
                                     <td>
-<!--                                        <a t-attf-href="/web#id=#{facture.id}&view_type=form&model=account.move">-->
-<!--                                            <t t-esc="facture.name"/>-->
-<!--                                        </a>-->
+                                        <strong>
+                                            <t t-esc="facture.name"/>
+                                        </strong>
                                     </td>
-                                    <td><t t-esc="facture.invoice_date"/></td>
-                                    <td><t t-esc="facture.amount_total"/> F CFA</td>
+                                    <td>
+                                        <t t-esc="facture.invoice_date"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="facture.invoice_date_due"/>
+                                    </td>
+                                    <td>
+                                        <!-- Statut avec badges et icônes pour chaque état -->
+                                        <t t-if="facture.payment_state == 'not_paid'">
+                                            <span class="badge bg-danger">
+                                                <i class="fa fa-times-circle"></i> Non payé
+                                            </span>
+                                        </t>
+                                        <t t-if="facture.payment_state == 'in_payment'">
+                                            <span class="badge bg-warning">
+                                                <i class="fa fa-hourglass-half"></i> En paiement
+                                            </span>
+                                        </t>
+                                        <t t-if="facture.payment_state == 'paid'">
+                                            <span class="badge bg-success">
+                                                <i class="fa fa-check-circle"></i> Payé
+                                            </span>
+                                        </t>
+                                        <t t-if="facture.payment_state == 'partial'">
+                                            <span class="badge bg-info">
+                                                <i class="fa fa-adjust"></i> Partiellement payé
+                                            </span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-esc="facture.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": facture.currency_id}'/>
+                                    </td>
                                 </tr>
                             </t>
                         </tbody>
                     </table>
-                    <a href="/mon_officine/factures/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                    <a href="/mon_officine/factures/pdf" class="btn btn-primary my-3">Télécharger en PDF</a>
                 </div>
             </t>
         </template>
+
 
         <!-- Template pour afficher les avoirs -->
         <template id="template_avoirs" name="Avoirs">
             <t t-call="website.layout">
                 <div class="container">
-                    <h2>Mes Avoirs</h2>
-                    <table class="table table-striped">
-                        <thead>
+                    <h1 class="text-primary text-center my-3">Mes Avoirs</h1>
+                    <table class="table table-responsive table-striped">
+                        <thead class="bg-primary text-white">
                             <tr>
-                                <th>Numéro d'Avoir</th>
-                                <th>Date</th>
-                                <th>Montant Total</th>
+                                <th>REF</th>
+                                <th>Date de facturation</th>
+                                <th>Date d'échéance</th>
+                                <th>Statut</th>
+                                <th>Montant dû</th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="avoirs" t-as="avoir">
                                 <tr>
                                     <td>
-<!--                                        <a t-attf-href="/web#id=#{avoir.id}&view_type=form&model=account.move">-->
-<!--                                            <t t-esc="avoir.name"/>-->
-<!--                                        </a>-->
+                                        <strong>
+                                            <t t-esc="avoir.name"/>
+                                        </strong>
                                     </td>
-                                    <td><t t-esc="avoir.invoice_date"/></td>
-                                    <td><t t-esc="avoir.amount_total"/> €</td>
+                                    <td>
+                                        <t t-esc="avoir.invoice_date"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="avoir.invoice_date_due"/>
+                                    </td>
+                                    <td>
+                                        <!-- Statut avec badges et icônes pour chaque état -->
+                                        <t t-if="avoir.payment_state == 'not_paid'">
+                                            <span class="badge bg-danger">
+                                                <i class="fa fa-times-circle"></i> Non payé
+                                            </span>
+                                        </t>
+                                        <t t-if="avoir.payment_state == 'in_payment'">
+                                            <span class="badge bg-warning">
+                                                <i class="fa fa-hourglass-half"></i> En paiement
+                                            </span>
+                                        </t>
+                                        <t t-if="avoir.payment_state == 'paid'">
+                                            <span class="badge bg-success">
+                                                <i class="fa fa-check-circle"></i> Payé
+                                            </span>
+                                        </t>
+                                        <t t-if="avoir.payment_state == 'partial'">
+                                            <span class="badge bg-info">
+                                                <i class="fa fa-adjust"></i> Partiellement payé
+                                            </span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-esc="avoir.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": avoir.currency_id}'/>
+                                    </td>
                                 </tr>
                             </t>
                         </tbody>
                     </table>
-                    <a href="/mon_officine/avoirs/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                    <a href="/mon_officine/avoirs/pdf" class="btn btn-primary my-3">Télécharger en PDF</a>
                 </div>
             </t>
         </template>
@@ -68,28 +133,77 @@
         <template id="template_releves" name="Relevés">
             <t t-call="website.layout">
                 <div class="container">
-                    <h2>Mes Relevés</h2>
-                    <table class="table table-striped">
-                        <thead>
+                    <h1 class="text-primary text-center my-3">Mes Relevés</h1>
+                    <table class="table table-responsive table-striped text-center">
+                        <thead class="bg-primary text-white">
                             <tr>
-                                <th>Numéro de Relevé</th>
-                                <th>Date</th>
+                                <th>Date facture</th>
+                                <th>Facture N°</th>
+                                <th>Montant facturé</th>
+                                <th>Montant réglé</th>
+                                <th>Reste à payer</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <t t-foreach="releves" t-as="releve">
+                            <!-- Boucle qui affiche toutes les factures -->
+                            <t t-if="factures_non_paye">
+                                <t t-foreach="factures_non_paye" t-as="releve">
                                 <tr>
                                     <td>
-<!--                                        <a t-attf-href="/web#id=#{releve.id}&view_type=form&model=account.bank.statement">-->
-<!--                                            <t t-esc="releve.name"/>-->
-<!--                                        </a>-->
+                                        <t t-esc="releve.invoice_date"/>
                                     </td>
-                                    <td><t t-esc="releve.date"/></td>
+                                    <td>
+                                        <strong>
+                                            <t t-esc="releve.name"/>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <t t-esc="releve.amount_total_in_currency_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="releve.amount_total - releve.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="releve.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/>
+                                    </td>
                                 </tr>
                             </t>
+
+                            </t>
+                            <t t-else="">
+                                <tr><td colspan="5" class="text-center"> Vous n'avez aucune facture impayée ! </td></tr>
+                            </t>
+                            <!-- Affichage des totaux après la boucle -->
+                            <tr>
+                                <td colspan="4">
+                                    <strong>Total facture</strong>
+                                </td>
+                                <td class="bg-primary text-white">
+                                    <t t-esc="total_facture_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <strong>Total réglé</strong>
+                                </td>
+                                <td class="bg-primary text-white">
+                                    <t t-esc="total_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <strong>Total restant à payer</strong>
+                                </td>
+                                <td class="bg-primary text-white">
+                                    <strong>
+                                        <t t-esc="reste_a_payer" t-options="{'widget': 'monetary', 'display_currency': devise}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+
                         </tbody>
                     </table>
-                    <a href="/mon_officine/releves/pdf" class="btn btn-primary">Télécharger en PDF</a>
+                    <a href="/mon_officine/releves/pdf" class="btn btn-primary my-3">Télécharger en PDF</a>
                 </div>
             </t>
         </template>

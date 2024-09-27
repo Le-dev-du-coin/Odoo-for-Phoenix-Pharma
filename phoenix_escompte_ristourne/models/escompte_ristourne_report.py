@@ -5,6 +5,7 @@ class EscompteRistourneReport(models.Model):
     _description = 'Rapport Escompte et Ristourne'
     _rec_name = 'month'
 
+    pharmacie_id= fields.Many2one('res.company', string='Pharmacie', required=True, default=lambda self: self.env.company)
     month = fields.Date(string="Mois", required=True)
     total_invoices = fields.Integer(string="Nombre de factures", readonly=True)
     total_amount = fields.Monetary(string="Montant total des factures", readonly=True, currency_field='currency_id')
