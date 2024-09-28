@@ -15,8 +15,8 @@
                     <field name="pharmacie_id" string="Pharmacie"/>
                     <field name="month" string="Mois"/>
                     <field name="total_invoices" string="Nombre de factures"/>
-                    <field name="total_amount" string="Montant total des factures"/>
-                    <field name="total_escompte" string="Montant total des escomptes"/>
+                    <field name="total_amount" string="Montant total des factures" widget="monetary"/>
+                    <field name="total_escompte" string="Montant total des escomptes" widget="monetary"/>
                 </tree>
             </field>
         </record>
@@ -64,8 +64,8 @@
                     <field name="pharmacie_id" string="Pharmacie"/>
                     <field name="month" string="Mois"/>
                     <field name="total_invoices" string="Nombre de factures"/>
-                    <field name="total_amount" string="Montant total des factures"/>
-                    <field name="total_ristourne" string="Montant total des ristournes"/>
+                    <field name="total_amount" string="Montant total des factures" widget="monetary"/>
+                    <field name="total_ristourne" string="Montant total des ristournes" widget="monetary"/>
                 </tree>
             </field>
         </record>

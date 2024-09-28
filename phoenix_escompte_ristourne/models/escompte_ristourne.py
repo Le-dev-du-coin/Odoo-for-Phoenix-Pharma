@@ -55,7 +55,7 @@ class ResPartner(models.Model):
                     "total_amount": 0,
                     "total_escompte": 0,
                     "total_ristourne": 0,
-                    "currency_id": self.env.company.currency_id.id,
+                    "currency_id": partner.company_id.currency_id.id or self.env.company.currency_id.id,
                 }
             )
 

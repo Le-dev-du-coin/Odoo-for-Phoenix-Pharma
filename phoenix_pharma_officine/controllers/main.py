@@ -1,6 +1,6 @@
 from odoo import http
 from datetime import datetime
-
+from dateutil.relativedelta import relativedelta
 
 class MonOfficineController(http.Controller):
 
@@ -51,7 +51,7 @@ class MonOfficineController(http.Controller):
         ])
         
         # Recuperer la devise
-        devise = http.request.env.user.company_id.currency_id
+        devise = http.request.env.user.partner_id.currency_id
 
         total_facture = sum(factures_non_paye.mapped('amount_total'))
 
@@ -97,7 +97,7 @@ class MonOfficineController(http.Controller):
         # Informations de la Pharmacie
         # --
         user = http.request.env.user
-        pharmacie = user.company_id
+        pharmacie = user.partner_id
 
         if not pharmacie:
             pass
@@ -112,12 +112,14 @@ class MonOfficineController(http.Controller):
         end_date = today
 
         # Chiffre d'affaire du mois
+        devise = http.request.env.user.partner_id.currency_id
+        
         invoices = http.request.env["account.move"].sudo().search(
             [
                 ("move_type", "=", "out_invoice"),
                 ("invoice_date", ">=", start_date),
                 ("invoice_date", "<=", end_date),
-                ("company_id", "=", pharmacie.id),
+                ("partner_id", "=", pharmacie.id),
             ]
         )
 
@@ -130,106 +132,94 @@ class MonOfficineController(http.Controller):
             )
         )
 
-        # Chiffre d'affaire de l'année précédente pour le même mois
-        start_date_last_year = start_date.replace(year=start_date.year - 1)
-        end_date_last_year = end_date.replace(year=end_date.year - 1)
+        start_date_last_month = start_date - relativedelta(months=1)
+        end_date_last_month = end_date - relativedelta(months=1)
 
-        invoices_last_year = http.request.env["account.move"].search(
+        invoices_last_month = http.request.env["account.move"].search(
             [
                 ("move_type", "=", "out_invoice"),
-                ("invoice_date", ">=", start_date_last_year),
-                ("invoice_date", "<=", end_date_last_year),
-                ("company_id", "=", pharmacie.id),
+                ("invoice_date", ">=", start_date_last_month),
+                ("invoice_date", "<=", end_date_last_month),
+                ("partner_id", "=", pharmacie.id),
             ]
         )
 
-        chiffre_affaire_annee_precedente = sum(
-            invoices_last_year.mapped("amount_total")
+        chiffre_affaire_mois_precedent = sum(
+            invoices_last_month.mapped("amount_total")
         )
 
         # Évolution en %
         evolution_pourcentage = 0
-        if chiffre_affaire_annee_precedente:
+        if chiffre_affaire_mois_precedent:
             evolution_pourcentage = (
-                (chiffre_affaire_mois - chiffre_affaire_annee_precedente)
-                / chiffre_affaire_annee_precedente
+                (chiffre_affaire_mois - chiffre_affaire_mois_precedent)
+                / chiffre_affaire_mois_precedent
             ) * 100
 
         # --
         # Remise
         # -- 
         partner = user.partner_id
-        remise = partner.property_product_pricelist.discount_policy
+        lignes = http.request.env["account.move.line"].sudo().search([
+            ("partner_id", "=", partner.id),
+            ("discount", ">", 0)
+        ])
+        
+        total_remise = 0.0
+        for ligne in lignes:
+            # Le montant de la remise est : price_unit * (discount / 100)
+            montant_remise = ligne.price_unit * (ligne.discount / 100)
+            # On ajoute ce montant au total des remises
+            total_remise += montant_remise
+
+        # --
+        # En cours
+        # --
+        #Factures non payées
+        unpaid_invoices = http.request.env["account.move"].search(
+            [
+                ("partner_id", "=", partner.id),
+                ("move_type", "=", "out_invoice"),
+                ("payment_state", "!=", "paid"),
+            ]
+        )
+
+        en_cours = sum(unpaid_invoices.mapped("amount_residual"))
+
+        # -- 
+        # Escompte & Ristourne
+        # --
+        partner = user.partner_id
+        current_year = datetime.now().year
+        month = datetime.now().month
+
+        reports = http.request.env['escompte.ristourne.report'].sudo().search([
+            ('pharmacie_id', '=', partner.id),
+            ('month', '>=', f'{current_year}-01-01'),
+            ('month', '<=', f'{current_year}-12-31')
+        ])
+
+        total_ristourne = sum(report.total_ristourne for report in reports)
+        total_escompte = sum(report.total_escompte for report in reports)
+
 
         context = {
             # Pharmacie
             "pharmacie": pharmacie,
             # Chiffres d'affaires
+            "device": devise,
             "chiffre_affaire_mois": chiffre_affaire_mois,
             "chiffre_affaire_cours": chiffre_affaire_cours,
-            "chiffre_affaire_annee_precedente": chiffre_affaire_annee_precedente,
+            "chiffre_affaire_mois_precedente": chiffre_affaire_mois_precedent,
             "evolution_pourcentage": evolution_pourcentage,
             # Remise
-            "remise": remise,
+            "remise": total_remise,
+            # En cours
+            "en_cours": en_cours,
+            # Escompte & Ristourne
+            'total_escompte': total_escompte,
+            'total_ristourne': total_ristourne,
         }
         return http.request.render(
             "phoenix_pharma_officine.template_compte_client", context
         )
-        user = http.request.env.user
-        partner = user.partner_id
-
-        # Exemple de récupération de la remise depuis le modèle partenaire
-        remise = partner.property_product_pricelist.discount_policy
-
-        values = {
-            "remise": remise,
-        }
-        return http.request.render(
-            "phoenix_pharma_officine.template_compte_client", values
-        )
-
-    # @http.route("/mon_officine/en_cours", type="http", auth="user", website=True)
-    # def en_cours(self, **kwargs):
-    #     user = http.request.env.user
-    #     partner = user.partner_id
-
-    #     # Factures non payées
-    #     unpaid_invoices = http.request.env["account.move"].search(
-    #         [
-    #             ("partner_id", "=", partner.id),
-    #             ("move_type", "=", "out_invoice"),
-    #             ("payment_state", "!=", "paid"),
-    #         ]
-    #     )
-
-    #     en_cours = sum(unpaid_invoices.mapped("amount_residual"))
-
-    #     values = {
-    #         "en_cours": en_cours,
-    #     }
-    #     return http.request.render(
-    #         "phoenix_pharma_officine.template_compte_client", values
-    #     )
-
-    # @http.route("/mon_officine/ristourne", type="http", auth="user", website=True)
-    # def ristourne(self, **kwargs):
-    #     user = http.request.env.user
-    #     partner = user.partner_id
-
-    #     # Calcul des ristournes pour le partenaire
-    #     invoices = http.request.env["account.move"].search(
-    #         [
-    #             ("partner_id", "=", partner.id),
-    #             ("move_type", "=", "out_invoice"),
-    #             ("state", "=", "posted"),
-    #         ]
-    #     )
-
-    #     ristourne = sum(invoices.mapped("amount_discount"))
-
-    #     values = {
-    #         "ristourne": ristourne,
-    #     }
-    #     return http.request.render(
-    #         "phoenix_pharma_officine.template_compte_client", values
-    #     )

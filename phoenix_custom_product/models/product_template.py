@@ -16,25 +16,15 @@ class ProductTemplate(models.Model):
     promotion_start_at = fields.Date(string='Date de Début de Promotion', store=True)
     promotion_end_at = fields.Date(string='Date de Fin de Promotion', store=True)
 
+    # best_sellers = fields.Integer(string='Meilleures ventes', compute='_compute_best_sellers')
+    
     # Laboratory value
     #labo_value = fields.Monetary('Valorisation mensuelle', compute='_compute_labo_value', store=True)
 
-    """best_sellers = fields.Integer(string='Meilleures ventes', compute='_compute_best_sellers')
-    top_sellers = fields.Integer(string='Mon Top', compute='_compute_top_sellers')
     
     
-    @api.depends('order_line_ids')
-    def _compute_best_sellers(self):
-        for product in self:
-            total_sales = sum(order_line.product_uom_qty)"""
+    # @api.depends('order_line_ids')
+    # def _compute_best_sellers(self):
+    #     for product in self:
+    #         total_sales = sum(order_line.product_uom_qty)
 
-    # @api.model
-    # def create(self, vals):
-    #     if vals.get('promotion') and not vals.get('promotion_number'):
-    #         vals['promotion_number'] = self.env['ir.sequence'].next_by_code('product.template.promotion.number') or '/'
-    #     return super(ProductTemplate, self).create(vals)
-    #
-    # def write(self, vals):
-    #     if 'promotion' in vals and vals['promotion'] and not self.promotion_number:
-    #         vals['promotion_number'] = self.env['ir.sequence'].next_by_code('product.template.promotion.number') or '/'
-    #     return super(ProductTemplate, self).write(vals)

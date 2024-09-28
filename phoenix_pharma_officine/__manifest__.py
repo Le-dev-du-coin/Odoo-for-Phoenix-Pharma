@@ -9,7 +9,7 @@
     'author': 'Social360',
     'website': 'www.social360mali.com',
     'license': 'AGPL-3',
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'phoenix_escompte_ristourne',],
     'data': [
         'views/mon_officine_views.xml',
         'views/compte_client_views.xml',

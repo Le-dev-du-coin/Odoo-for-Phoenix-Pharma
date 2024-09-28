@@ -178,6 +178,34 @@ class PhoenixWebsiteSale(http.Controller):
             'pager': pager
         }
         return request.render('website_sale_phoenix_pharma.new_products_template', context)
+    
+    # Vue meilleure vente produits
+    @http.route(['/produits/meilleure-vente', '/produits/meilleure-vente/page/<int:page>'], type='http',
+                auth='user', website=True)
+    def best_seller(self, page=1, **kw):
+        products_per_page = 10  # Nombre de produits par page
+        offset = (page - 1) * products_per_page
+
+        best_seller = request.env['product.template'].sudo().search([
+            ('best_sellers', '>', 10),
+        ], offset=offset, limit=products_per_page)
+
+        total_products = request.env['product.template'].sudo().search_count([
+            ('best_sellers', '>', 10),
+        ])
+
+        pager = request.website.pager(
+            url='/produits/meilleure-vente',
+            total=total_products,
+            page=page,
+            step=products_per_page,
+        )
+
+        context = {
+            'best_seller': best_seller,
+            'pager': pager
+        }
+        return request.render('website_sale_phoenix_pharma.best_seller_template', context)
 
     # Products views based on DCI
     @http.route(['/produits/dci/<int:dci_id>', '/produits/dci/<int:dci_id>/page/<int:page>'], type='http', auth="user",
