@@ -11,6 +11,7 @@
     'license': 'AGPL-3',
     'depends': ['base', 'account', 'phoenix_escompte_ristourne',],
     'data': [
+        'report/releve_report_pdf_template.xml',
         'views/mon_officine_views.xml',
         'views/compte_client_views.xml',
     ],

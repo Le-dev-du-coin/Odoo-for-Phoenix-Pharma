@@ -90,7 +90,7 @@ class MonOfficineController(http.Controller):
             "phoenix_pharma_officine.template_compte_client", context
         )
 
-    @http.route("/mon_officine/compte-client", type="http", auth="user", website=True)
+    @http.route("/my-officine/compte-client", type="http", auth="user", website=True)
     def myOfficine(self, **kwargs):
 
         # --
@@ -100,7 +100,10 @@ class MonOfficineController(http.Controller):
         pharmacie = user.partner_id
 
         if not pharmacie:
-            pass
+            context = {
+                'error': "Vous n'avez pas de pharmacie"
+            }
+            return http.request.render("phoenix_pharma_officine.template_compte_client")
 
         # --
         # Chiffres d'affaires
@@ -223,3 +226,51 @@ class MonOfficineController(http.Controller):
         return http.request.render(
             "phoenix_pharma_officine.template_compte_client", context
         )
+
+    # ---------------------------------------
+    # Telechargement releve PDF
+    # ---------------------------------------
+    @http.route('/my-officine/releves/pdf', type='http', auth='user')
+    def telecharger_releve_pdf(self, **kw):
+        # Récupérer les factures impayées
+        factures_non_paye = http.request.env['account.move'].sudo().search([
+            ('state', '=', 'posted'),
+            ('move_type', '=', 'out_invoice'),
+            ('payment_state', '!=', 'paid'),
+            ('partner_id', '=', http.request.env.user.partner_id.id)
+        ])
+
+        # Calculer les totaux
+        total_facture_paye = sum(factures_non_paye.mapped('amount_total'))
+        total_paye = sum(fact.amount_total - fact.amount_residual_signed for fact in factures_non_paye)
+        reste_a_payer = sum(factures_non_paye.mapped('amount_residual_signed'))
+        devise = http.request.env.user.company_id.currency_id
+
+        data = {
+            'factures_non_paye': factures_non_paye,
+            'total_facture_paye': total_facture_paye,
+            'total_paye': total_paye,
+            'reste_a_payer': reste_a_payer,
+            'devise': devise,
+        }
+
+        html = http.request.env['ir.qweb']._render(
+            'phoenix_pharma_officine.template_releve_pdf',  # Référence du template QWeb
+            data  # Les données à injecter dans le template
+        )
+
+        # Utiliser wkhtmltopdf pour convertir le HTML en PDF
+        pdf_content = http.request.env['ir.actions.report']._run_wkhtmltopdf(
+            [html]
+        )
+
+        # Préparer les en-têtes pour la réponse PDF
+        pdf_filename = 'releves.pdf'
+        pdf_headers = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(pdf_content)),
+            ('Content-Disposition', 'attachment; filename="%s"' % pdf_filename)
+        ]
+
+        # Retourner la réponse avec le fichier PDF généré
+        return http.request.make_response(pdf_content, headers=pdf_headers)

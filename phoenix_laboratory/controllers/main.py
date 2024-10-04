@@ -3,7 +3,7 @@ from odoo import http
 
 class LabStatisticController(http.Controller):
 
-    @http.route('/lab/laboratory', type='http', auth='user', website=True)
+    @http.route('/laboratoire/statistiques', type='http', auth='user', website=True)
     def laboratory(self, **kwargs):
         user = http.request.env.user
         partner = user.partner_id
@@ -14,7 +14,7 @@ class LabStatisticController(http.Controller):
 
         # Obtenir les produits pour l'entreprise du fournisseur connecté
         company = partner.company_id
-        products = http.request.env['product.template'].search([('company_id', '=', company.id)])
+        products = http.request.env['product.template'].sudo().search([('company_id', '=', company.id)])
 
         # Préparer les statistiques
         statistics = []

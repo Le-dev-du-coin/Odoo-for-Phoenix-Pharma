@@ -45,7 +45,6 @@
                                     <th>Adresse</th>
                                     <th>Téléphone</th>
                                     <th>N° Facture</th>
-                                    <th>Montant(CFA)</th>
                                     <th>Nbre de colis</th>
                                     <th>Livreur</th>
                                     <th>Heure de départ</th>
@@ -72,9 +71,6 @@
                                     </td>
                                     <td width="100px">
                                         <span t-esc="delivery.invoice_number"/>
-                                    </td>
-                                    <td>
-                                        <span t-esc="delivery.amount" widget="monetary"/>
                                     </td>
                                     <td>
                                         <span t-esc="delivery.colis_number"/>

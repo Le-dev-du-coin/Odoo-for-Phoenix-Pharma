@@ -180,8 +180,7 @@ class PhoenixWebsiteSale(http.Controller):
         return request.render('website_sale_phoenix_pharma.new_products_template', context)
     
     # Vue meilleure vente produits
-    @http.route(['/produits/meilleure-vente', '/produits/meilleure-vente/page/<int:page>'], type='http',
-                auth='user', website=True)
+    @http.route(['/produits/meilleures-ventes', '/produits/meilleures-ventes/page/<int:page>'], type='http', auth='user', website=True)
     def best_seller(self, page=1, **kw):
         products_per_page = 10  # Nombre de produits par page
         offset = (page - 1) * products_per_page
@@ -195,7 +194,7 @@ class PhoenixWebsiteSale(http.Controller):
         ])
 
         pager = request.website.pager(
-            url='/produits/meilleure-vente',
+            url='/produits/meilleures-ventes',
             total=total_products,
             page=page,
             step=products_per_page,

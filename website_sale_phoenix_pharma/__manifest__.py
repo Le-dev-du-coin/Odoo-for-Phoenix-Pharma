@@ -8,7 +8,7 @@
     'author': 'Social360',
     'website': 'www.social360mali.com',
     'license': 'LGPL-3',
-    'depends': ['website', 'website_sale', 'product', 'stock',],#'l10n_syscohada'
+    'depends': ['website', 'website_sale', 'product', 'stock', 'phoenix_custom_product'],#'l10n_syscohada'
     'data': [
         'views/all_products_template.xml',
         'views/search_results_template.xml',
@@ -16,6 +16,7 @@
         'views/arrivage_products_template.xml',
         'views/pre_arrivage_products_template.xml',
         'views/new_products_template.xml',
+        'views/best_seller_template.xml',
         'views/dci_template_views.xml',
     ],
     'assets': {

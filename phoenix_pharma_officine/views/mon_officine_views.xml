@@ -137,8 +137,9 @@
                     <table class="table table-responsive table-striped text-center">
                         <thead class="bg-primary text-white">
                             <tr>
-                                <th>Date facture</th>
                                 <th>Facture N°</th>
+                                <th>Date facture</th>
+                                <th>Date d'échéance</th>
                                 <th>Montant facturé</th>
                                 <th>Montant réglé</th>
                                 <th>Reste à payer</th>
@@ -149,13 +150,16 @@
                             <t t-if="factures_non_paye">
                                 <t t-foreach="factures_non_paye" t-as="releve">
                                 <tr>
+                                 <td>
+                                        <strong>
+                                            <t t-esc="releve.name"/>
+                                        </strong>
+                                    </td>
                                     <td>
                                         <t t-esc="releve.invoice_date"/>
                                     </td>
                                     <td>
-                                        <strong>
-                                            <t t-esc="releve.name"/>
-                                        </strong>
+                                        <t t-esc="releve.invoice_date_due"/>
                                     </td>
                                     <td>
                                         <t t-esc="releve.amount_total_in_currency_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/>
@@ -171,11 +175,11 @@
 
                             </t>
                             <t t-else="">
-                                <tr><td colspan="5" class="text-center"> Vous n'avez aucune facture impayée ! </td></tr>
+                                <tr><td colspan="6" class="text-center"> Vous n'avez aucune facture impayée ! </td></tr>
                             </t>
                             <!-- Affichage des totaux après la boucle -->
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5" class="text-end">
                                     <strong>Total facture</strong>
                                 </td>
                                 <td class="bg-primary text-white">
@@ -183,7 +187,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5" class="text-end">
                                     <strong>Total réglé</strong>
                                 </td>
                                 <td class="bg-primary text-white">
@@ -191,7 +195,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5" class="text-end">
                                     <strong>Total restant à payer</strong>
                                 </td>
                                 <td class="bg-primary text-white">
@@ -203,7 +207,7 @@
 
                         </tbody>
                     </table>
-                    <a href="/mon_officine/releves/pdf" class="btn btn-primary my-3">Télécharger en PDF</a>
+                    <a href="/my-officine/releves/pdf" class="btn btn-primary my-3">Télécharger en PDF</a>
                 </div>
             </t>
         </template>
