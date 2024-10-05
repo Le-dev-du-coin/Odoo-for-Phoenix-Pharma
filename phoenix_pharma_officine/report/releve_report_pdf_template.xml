@@ -1,93 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <template id="template_releve_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        h1 {
+                            text-align: center;
+                            color: #50b016;
+                        }
+                        .text-end {
+                            text-align: end;
+                        }
+                        .releve-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        .releve-table th, .releve-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+                        .releve-table th { background-color: #50b016; color: white; }
+                        .nom_facture { color: #50b016; }
+                        tfoot .text-end { text-align: end; }
+                        .bg-green { background-color: #50b016; color: white; }
+                    </style>
 
-    <template id="template_releve_pdf" name="Relevés PDF">
-    <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-            <!-- Ajout d'une police compatible UTF-8 -->
-            <style>
-                body {
-                    font-family: 'DejaVu Sans', sans-serif;
-                }
-                h1 {
-                    color: #50b016;
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-bottom: 20px;
-                }
-                th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                    text-align: center;
-                }
-                th {
-                    background-color: #50b016;
-                    color: white;
-                }
-                .nom_facture {
-                    color: #50b016;
-                }
-                .text-end {
-                    text-align: end;
-                }
-                .bg-green {
-                    background-color: #50b016;
-                    color: white;
-                }
-            </style>
+                    <h1 class="text-center text-primary mb-4">Mes Relevés</h1>
+                    <p class="text-end mb-4">Date du relevé : <t t-esc="date_aujourdhui"/></p>
 
-            <div class="page">
-                <h1 class="text-primary text-center my-3">Mes Relevés</h1>
-                <table class="table table-bordered table-striped text-center">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th>Facture N°</th>
-                            <th>Date facture</th>
-                            <th>Date d'échéance</th>
-                            <th>Montant facturé</th>
-                            <th>Montant réglé</th>
-                            <th>Reste à payer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-if="factures_non_paye">
-                            <t t-foreach="factures_non_paye" t-as="releve">
+                    <table class="releve-table">
+                        <thead>
+                            <tr>
+                                <th>Facture N°</th>
+                                <th>Date facture</th>
+                                <th>Date d'échéance</th>
+                                <th>Montant facturé</th>
+                                <th>Montant réglé</th>
+                                <th>Reste à payer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="factures_non_paye" t-as="facture">
                                 <tr>
-                                    <td class="nom_facture"><strong><t t-esc="releve.name"/></strong></td>
-                                    <td><t t-esc="releve.invoice_date"/></td>
-                                    <td><t t-esc="releve.invoice_date_due"/></td>
-                                    <td><t t-esc="releve.amount_total_in_currency_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/></td>
-                                    <td><t t-esc="releve.amount_total - releve.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/></td>
-                                    <td><t t-esc="releve.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": releve.currency_id}'/></td>
+                                    <td class="nom_facture"><strong><t t-esc="facture.name"/></strong></td>
+                                    <td><t t-esc="facture.invoice_date" t-options='{"widget": "date"}'/></td>
+                                    <td><t t-esc="facture.invoice_date_due" t-options='{"widget": "date"}'/></td>
+                                    <td><t t-esc="facture.amount_total" t-options='{"widget": "monetary", "display_currency": facture.currency_id}'/></td>
+                                    <td><t t-esc="facture.amount_total - facture.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": facture.currency_id}'/></td>
+                                    <td><t t-esc="facture.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": facture.currency_id}'/></td>
                                 </tr>
                             </t>
-                        </t>
-                        <t t-else="">
+                        </tbody>
+                        <tfoot>
                             <tr>
-                                <td colspan="6" class="text-center"> Vous n'avez aucune facture impayée ! </td>
+                                <td colspan="5" class="text-end">Total facturé :</td>
+                                <td class="bg-green"><t t-esc="total_facture_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
                             </tr>
-                        </t>
-                        <tr>
-                            <td colspan="5" class="text-end">Total facturé :</td>
-                            <td class="bg-green"><t t-esc="total_facture_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-end">Total réglé :</td>
-                            <td class="bg-green"><t t-esc="total_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-end">Total restant à payer :</td>
-                            <td class="bg-green"><t t-esc="reste_a_payer" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            <tr>
+                                <td colspan="5" class="text-end">Total réglé :</td>
+                                <td class="bg-green"><t t-esc="total_paye" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-end">Total restant à payer :</td>
+                                <td class="bg-green"><t t-esc="reste_a_payer" t-options="{'widget': 'monetary', 'display_currency': devise}"/></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
         </t>
-    </t>
-</template>
-
+    </template>
 </odoo>

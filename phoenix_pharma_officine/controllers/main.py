@@ -1,41 +1,127 @@
 from odoo import http
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import math
 
 class MonOfficineController(http.Controller):
 
     # ------------------------------------------
     # Vue pour les factures
     # ------------------------------------------
-    @http.route("/mon-officine/factures", type="http", auth="user", website=True)
-    def get_factures(self, **kwargs):
+    @http.route(["/mon-officine/factures", '/mon-officine/factures/page/<int:page>'], type="http", auth="user", website=True)
+    def get_factures(self, page=1, **kwargs):
+
+        factures_per_page = 3
+        offset = (page - 1) * factures_per_page
+
         factures = http.request.env["account.move"].sudo().search(
             [
                 ("move_type", "=", "out_invoice"),
                 ("state", "=", "posted"),
                 ("partner_id", "=", http.request.env.user.partner_id.id),
-            ]
+            ],
+            order="date desc, id desc",  # Ajoutez cette ligne
+            offset=offset,
+            limit=factures_per_page
         )
+        
+        total_factures = http.request.env['account.move'].sudo().search_count([
+            ("move_type", "=", "out_invoice"),
+            ("state", "=", "posted"),
+            ("partner_id", "=", http.request.env.user.partner_id.id),
+        ])
+
+        total_pages = math.ceil(total_factures / factures_per_page)
+        page = max(1, min(int(page), total_pages))
+
+        pager = http.request.website.pager(
+            url='/mon-officine/factures',
+            total=total_factures,
+            page=page,
+            step=factures_per_page,
+            url_args=kwargs  
+        )
+
         company = http.request.env.user.partner_id.company_id
 
-        context = {"factures": factures}
+        context = {
+            "factures": factures,
+            'pager': pager,
+        }
         return http.request.render("phoenix_pharma_officine.template_factures", context)
 
+    # Vue pour l'affichage facture dans un nouvel onglet 
+    @http.route('/facture/affichage/<int:facture_id>', type='http', auth="user")
+    def affichage_facture_pdf(self, facture_id):
+        facture = http.request.env['account.move'].sudo().browse(facture_id)
+        if not facture or facture.partner_id != http.request.env.user.partner_id:
+            return http.request.not_found()
+        pdf_content, _ = http.request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.report_invoice_with_payments', [facture.id])
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'), 
+            ('Content-Length', len(pdf_content)), 
+            ('Content-Disposition', f'inline; filename="Facture_{facture.name}.pdf"')
+            ]
+        return http.request.make_response(pdf_content, headers=pdfhttpheaders)
+    
     # -------------------------------------------
     # Vue pour les Avoirs
     # -------------------------------------------
-    @http.route("/mon-officine/avoirs", type="http", auth="user", website=True)
-    def get_avoirs(self, **kwargs):
+    @http.route(["/mon-officine/avoirs", '/mon-officine/avoirs/page/<int:page>'], type="http", auth="user", website=True)
+    def get_avoirs(self, page=1, **kwargs):
+        avoirs_per_page = 3
+        offset = (page - 1) * avoirs_per_page
+
         avoirs = http.request.env["account.move"].sudo().search(
             [
                 ("move_type", "=", "out_refund"),
                 ("state", "=", "posted"),
                 ("partner_id", "=", http.request.env.user.partner_id.id),
-            ]
+            ],
+            order="date desc, id desc",
+            offset=offset,
+            limit=avoirs_per_page
+        )
+        
+        total_avoirs = http.request.env['account.move'].sudo().search_count([
+            ("move_type", "=", "out_refund"),
+            ("state", "=", "posted"),
+            ("partner_id", "=", http.request.env.user.partner_id.id),
+        ])
+
+        total_pages = math.ceil(total_avoirs / avoirs_per_page)
+        page = max(1, min(int(page), total_pages))
+
+        pager = http.request.website.pager(
+            url='/mon-officine/avoirs',
+            total=total_avoirs,
+            page=page,
+            step=avoirs_per_page,
+            url_args=kwargs  
         )
 
-        context = {"avoirs": avoirs}
+        context = {
+            "avoirs": avoirs,
+            'pager': pager,
+        }
         return http.request.render("phoenix_pharma_officine.template_avoirs", context)
+
+      # Vue pour l'affichage avoir dans un nouvel onglet 
+    
+    # Vue pour l'affichage avoir dans un nouvel onglet 
+    @http.route('/avoir/affichage/<int:avoir_id>', type='http', auth="user")
+    def affichage_avoir_pdf(self, avoir_id):
+        avoir = http.request.env['account.move'].sudo().browse(avoir_id)
+        if not avoir or avoir.partner_id != http.request.env.user.partner_id or avoir.move_type != 'out_refund':
+            return http.request.not_found()
+        
+        pdf_content, _ = http.request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.report_invoice_with_payments', [avoir.id])
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(pdf_content)),
+            ('Content-Disposition', f'inline; filename="Avoir_{avoir.name}.pdf"')
+        ]
+        return http.request.make_response(pdf_content, headers=pdfhttpheaders)
 
     # -------------------------------------------
     # Vue pour les releves
@@ -90,6 +176,58 @@ class MonOfficineController(http.Controller):
             "phoenix_pharma_officine.template_compte_client", context
         )
 
+    # ---------------------------------------
+    # Telechargement releve PDF
+    # ---------------------------------------
+    @http.route('/my-officine/releves/pdf', type='http', auth='user')
+    def afficher_releve_pdf(self, **kw):
+        factures_non_paye = http.request.env['account.move'].sudo().search([
+            ('state', '=', 'posted'),
+            ('move_type', '=', 'out_invoice'),
+            ('payment_state', 'in', ['not_paid', 'partial']),
+            ('partner_id', '=', http.request.env.user.partner_id.id)
+        ])
+
+        total_facture_paye = sum(factures_non_paye.mapped('amount_total'))
+        total_paye = sum(fact.amount_total - fact.amount_residual_signed for fact in factures_non_paye)
+        reste_a_payer = sum(factures_non_paye.mapped('amount_residual_signed'))
+        devise = http.request.env.user.company_id.currency_id
+
+        data = {
+            'factures_non_paye': factures_non_paye,
+            'total_facture_paye': total_facture_paye,
+            'total_paye': total_paye,
+            'reste_a_payer': reste_a_payer,
+            'devise': devise,
+            'date_aujourdhui': datetime.now().strftime('%d-%m-%Y')
+        }
+
+        # Rendre le template en HTML
+        html = http.request.env['ir.qweb']._render('phoenix_pharma_officine.template_releve_pdf', data)
+
+        # Convertir HTML en PDF
+        pdf_content = http.request.env['ir.actions.report'].sudo()._run_wkhtmltopdf(
+            [html],
+            specific_paperformat_args={
+                'data-report-margin-top': 10,
+                'data-report-margin-bottom': 10,
+                'data-report-margin-left': 10,
+                'data-report-margin-right': 10,
+            }
+        )
+
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(pdf_content)),
+            ('Content-Disposition', f'inline; filename="Releve_{datetime.now().strftime("%Y%m%d")}.pdf"')
+        ]
+
+        return http.request.make_response(pdf_content, headers=pdfhttpheaders)
+    
+    
+    # -----------------------------------------
+    # Compte Client 
+    # -----------------------------------------
     @http.route("/my-officine/compte-client", type="http", auth="user", website=True)
     def myOfficine(self, **kwargs):
 
@@ -227,50 +365,4 @@ class MonOfficineController(http.Controller):
             "phoenix_pharma_officine.template_compte_client", context
         )
 
-    # ---------------------------------------
-    # Telechargement releve PDF
-    # ---------------------------------------
-    @http.route('/my-officine/releves/pdf', type='http', auth='user')
-    def telecharger_releve_pdf(self, **kw):
-        # Récupérer les factures impayées
-        factures_non_paye = http.request.env['account.move'].sudo().search([
-            ('state', '=', 'posted'),
-            ('move_type', '=', 'out_invoice'),
-            ('payment_state', '!=', 'paid'),
-            ('partner_id', '=', http.request.env.user.partner_id.id)
-        ])
-
-        # Calculer les totaux
-        total_facture_paye = sum(factures_non_paye.mapped('amount_total'))
-        total_paye = sum(fact.amount_total - fact.amount_residual_signed for fact in factures_non_paye)
-        reste_a_payer = sum(factures_non_paye.mapped('amount_residual_signed'))
-        devise = http.request.env.user.company_id.currency_id
-
-        data = {
-            'factures_non_paye': factures_non_paye,
-            'total_facture_paye': total_facture_paye,
-            'total_paye': total_paye,
-            'reste_a_payer': reste_a_payer,
-            'devise': devise,
-        }
-
-        html = http.request.env['ir.qweb']._render(
-            'phoenix_pharma_officine.template_releve_pdf',  # Référence du template QWeb
-            data  # Les données à injecter dans le template
-        )
-
-        # Utiliser wkhtmltopdf pour convertir le HTML en PDF
-        pdf_content = http.request.env['ir.actions.report']._run_wkhtmltopdf(
-            [html]
-        )
-
-        # Préparer les en-têtes pour la réponse PDF
-        pdf_filename = 'releves.pdf'
-        pdf_headers = [
-            ('Content-Type', 'application/pdf'),
-            ('Content-Length', len(pdf_content)),
-            ('Content-Disposition', 'attachment; filename="%s"' % pdf_filename)
-        ]
-
-        # Retourner la réponse avec le fichier PDF généré
-        return http.request.make_response(pdf_content, headers=pdf_headers)
+    
