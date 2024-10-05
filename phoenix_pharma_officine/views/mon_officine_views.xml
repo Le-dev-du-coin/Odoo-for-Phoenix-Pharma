@@ -24,7 +24,7 @@
                                 <t t-foreach="factures" t-as="facture">
                                     <tr>
                                         <td>
-                                            <a t-att-href="'/facture/affichage/%s' % facture.id" class="btn btn-primary" target="_blank">
+                                            <a t-att-href="'/facture/affichage/%s' % facture.id" class="btn btn-primary text-white" target="_blank">
                                                 <i class="fa fa-eye"></i> Voir facture
                                             </a>
                                         </td>
@@ -86,67 +86,67 @@
                     <h1 class="text-primary text-center my-3">Mes Avoirs</h1>
                     <div class="shadow p-3 mb-5 bg-body rounded-3">
                         <table class="table table-responsive table-striped">
-                        <thead class="bg-primary text-white">
-                            <tr>
-                            <th>
-                                <i class="fa fa-file-pdf-o"></i> Document en PDF</th>
-                                <th>REF</th>
-                                <th>Date de facturation</th>
-                                <th>Date d'échéance</th>
-                                <th>Statut</th>
-                                <th>Montant dû</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="avoirs" t-as="avoir">
+                            <thead class="bg-primary text-white">
                                 <tr>
-                                 <td>
-                                            <a t-att-href="'/avoir/affichage/%s' % avoir.id" class="btn btn-primary" target="_blank">
+                                    <th>
+                                        <i class="fa fa-file-pdf-o"></i> Document en PDF</th>
+                                    <th>REF</th>
+                                    <th>Date de facturation</th>
+                                    <th>Date d'échéance</th>
+                                    <th>Statut</th>
+                                    <th>Montant dû</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="avoirs" t-as="avoir">
+                                    <tr>
+                                        <td>
+                                            <a t-att-href="'/avoir/affichage/%s' % avoir.id" class="btn btn-primary text-white" target="_blank">
                                                 <i class="fa fa-eye"></i> Voir Avoir
                                             </a>
                                         </td>
-                                    <td>
-                                        <strong>
-                                            <t t-esc="avoir.name"/>
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <t t-esc="avoir.invoice_date.strftime('%d-%m-%Y') if avoir.invoice_date else ''"/>
-                                    </td>
-                                    <td>
-                                        <t t-esc="avoir.invoice_date_due.strftime('%d-%m-%Y') if avoir.invoice_date_due else ''"/>
-                                    </td>
-                                    <td>
-                                        <!-- Statut avec badges et icônes pour chaque état -->
-                                        <t t-if="avoir.payment_state == 'not_paid'">
-                                            <span class="badge bg-danger">
-                                                <i class="fa fa-times-circle"></i> Non payé
-                                            </span>
-                                        </t>
-                                        <t t-if="avoir.payment_state == 'in_payment'">
-                                            <span class="badge bg-warning">
-                                                <i class="fa fa-hourglass-half"></i> En paiement
-                                            </span>
-                                        </t>
-                                        <t t-if="avoir.payment_state == 'paid'">
-                                            <span class="badge bg-success">
-                                                <i class="fa fa-check-circle"></i> Payé
-                                            </span>
-                                        </t>
-                                        <t t-if="avoir.payment_state == 'partial'">
-                                            <span class="badge bg-info">
-                                                <i class="fa fa-adjust"></i> Partiellement payé
-                                            </span>
-                                        </t>
-                                    </td>
-                                    <td>
-                                        <t t-esc="avoir.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": avoir.currency_id}'/>
-                                    </td>
-                                </tr>
-                            </t>
-                        </tbody>
-                    </table>
-                    <div class="products_pager form-inline justify-content-center mt-3">
+                                        <td>
+                                            <strong>
+                                                <t t-esc="avoir.name"/>
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <t t-esc="avoir.invoice_date.strftime('%d-%m-%Y') if avoir.invoice_date else ''"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="avoir.invoice_date_due.strftime('%d-%m-%Y') if avoir.invoice_date_due else ''"/>
+                                        </td>
+                                        <td>
+                                            <!-- Statut avec badges et icônes pour chaque état -->
+                                            <t t-if="avoir.payment_state == 'not_paid'">
+                                                <span class="badge bg-danger">
+                                                    <i class="fa fa-times-circle"></i> Non payé
+                                                </span>
+                                            </t>
+                                            <t t-if="avoir.payment_state == 'in_payment'">
+                                                <span class="badge bg-warning">
+                                                    <i class="fa fa-hourglass-half"></i> En paiement
+                                                </span>
+                                            </t>
+                                            <t t-if="avoir.payment_state == 'paid'">
+                                                <span class="badge bg-success">
+                                                    <i class="fa fa-check-circle"></i> Payé
+                                                </span>
+                                            </t>
+                                            <t t-if="avoir.payment_state == 'partial'">
+                                                <span class="badge bg-info">
+                                                    <i class="fa fa-adjust"></i> Partiellement payé
+                                                </span>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-esc="avoir.amount_residual_signed" t-options='{"widget": "monetary", "display_currency": avoir.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="products_pager form-inline justify-content-center mt-3">
                             <t t-call="website.pager">
                                 <t t-set="url" t-value="'/mon-officine/factures'"/>
                             </t>
@@ -236,7 +236,7 @@
 
                         </tbody>
                     </table>
-                    <a href="/my-officine/releves/pdf" target="_blank" class="btn btn-primary my-3">Télécharger en PDF</a>
+                    <a href="/my-officine/releves/pdf" target="_blank" class="btn btn-primary my-3 text-white   ">Télécharger en PDF</a>
                 </div>
             </t>
         </template>

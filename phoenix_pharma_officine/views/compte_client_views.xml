@@ -3,246 +3,221 @@
 <odoo>
     <template id="template_compte_client" name="Compte Client">
         <t t-call="website.layout">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
             <style>
-                .dropdown-section {
-                    margin-bottom: 20px;
+                :root {
+                    --primary-color: #29a744;
+                    --secondary-color: #2b2b2b;
+                    --background-color: #f8f9fa;
+                    --hover-color: rgba(41, 167, 68, 0.1);
+                    --value-color: #29a744;
                 }
-
-                .info-content ul {
-                    list-style-type: none;
+                body {
+                    font-family: 'Roboto', sans-serif;
+                    background-color: var(--background-color);
                 }
-
-                .info-content p {
-                    font-size: 16px;
-                    color: #2b2b2b;
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
                 }
-
-                .info-content span {
+                .tab {
+                    transition: all 0.3s ease;
+                    padding: 10px 15px;
+                    color: var(--secondary-color);
+                    text-decoration: none;
+                    border-bottom: 3px solid transparent;
+                }
+                .tab:hover {
+                    background-color: var(--hover-color);
+                    text-decoration: none;
+                }
+                .tab.active {
+                    border-bottom: 3px solid var(--primary-color);
+                    color: var(--primary-color);
+                }
+                .tab i {
+                    margin-right: 10px;
+                }
+                .info-content {
+                    background-color: white;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    padding: 20px;
+                    margin-top: 20px;
+                }
+                .info-content h4 {
+                    color: var(--primary-color);
+                    margin-bottom: 15px;
+                    
+                }
+                .table {
+                    box-shadow: none;
+                }
+                .table td, .table th {
+                    vertical-align: middle;
+                }
+                .value {
+                    color: var(--value-color);
                     font-weight: bold;
-                    color: #29a744;
                 }
-
-                /* Layout pour Desktop : Afficher les onglets sur grand écran, cacher la liste déroulante */
-                @media (min-width: 768px) {
-                    .desktop_h {
-                        height: 80vh;
-                    }
-                    .dropdown-section {
-                        display: none;
-                    }
-
-                    /* Style pour les onglets sur les grands écrans */
-                    .tabs {
-                        display: flex;
-                        justify-content: space-between;
-                        padding-bottom: 10px;
-                        border-bottom: 2px solid #ccc;
-                    }
-
-                    .tab {
-                        cursor: pointer;
-                        padding: 10px 20px;
-                        font-weight: bold;
-                        color: #2b2b2b;
-                    }
-
-                    .tab.active {
-                        border-bottom: 3px solid #29a744;
-                    }
-
-                    #content-area {
-                        margin-top: 20px;
-                    }
-                }
-
-                /* Layout pour Mobile : Afficher la liste déroulante et cacher les onglets */
                 @media (max-width: 767px) {
-                    .tabs {
-                        display: none;
-                    }
-
                     .dropdown-section {
-                        display: block;
+                        margin-bottom: 20px;
                     }
                 }
             </style>
 
             <div class="container">
-                <div class="desktop_h">
-                    <h1 class="text-primary text-center my-3"> Bienvenue, dans votre Compte Client</h1>
+                <h1 class="text-primary text-center my-4">Bienvenue dans votre Compte Client</h1>
 
-                    <!-- Onglets pour Desktop -->
-                    <div class="tabs">
-                        <div class="tab" data-target="information">Informations Générales</div>
-                        <div class="tab" data-target="chiffre-affaire">Chiffre d'Affaires</div>
-                        <div class="tab" data-target="en-cours">En Cours</div>
-                        <div class="tab" data-target="remise">Remise</div>
-                        <div class="tab" data-target="escompte_ristourne">Escompte et Ristourne</div>
+                <!-- Onglets pour Desktop -->
+                <nav class="tabs d-none d-md-flex justify-content-between mb-4" role="tablist">
+                    <a class="tab active" data-target="information" role="tab" aria-selected="true">
+                        <i class="fas fa-info-circle"></i>Informations Générales
+                    </a>
+                    <a class="tab" data-target="chiffre-affaire" role="tab">
+                        <i class="fas fa-chart-line"></i>Chiffre d'Affaires
+                    </a>
+                    <a class="tab" data-target="en-cours" role="tab">
+                        <i class="fas fa-clock"></i>En Cours
+                    </a>
+                    <a class="tab" data-target="remise" role="tab">
+                        <i class="fas fa-percentage"></i>Remise
+                    </a>
+                    <a class="tab" data-target="escompte_ristourne" role="tab">
+                        <i class="fas fa-money-bill-wave"></i>Escompte et Ristourne
+                    </a>
+                </nav>
+
+                <!-- Liste déroulante pour Mobile -->
+                <div class="dropdown-section d-md-none">
+                    <select id="info-select" class="form-control">
+                        <option value="information">Informations générales</option>
+                        <option value="chiffre-affaire">Chiffre d'Affaires</option>
+                        <option value="en-cours">En Cours</option>
+                        <option value="remise">Remise</option>
+                        <option value="escompte_ristourne">Escompte et Ristourne</option>
+                    </select>
+                </div>
+
+                <div id="content-area">
+                    <div id="information" class="info-content">
+                        <h4>Information générale:</h4>
+                        <div class="col-md-8">
+                            <table class="table table-responsive table-striped">
+                                <tr>
+                                    <td>Pharmacie :</td>
+                                    <td class="value"><t t-esc="pharmacie.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Adresse :</td>
+                                    <td class="value"><t t-esc="pharmacie.street"/> - <t t-esc="pharmacie.city"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Pays :</td>
+                                    <td class="value"><t t-esc="pharmacie.country_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Téléphone :</td>
+                                    <td class="value"><t t-esc="pharmacie.phone"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Email :</td>
+                                    <td class="value"><t t-esc="pharmacie.email"/></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
 
-                    <!-- Liste déroulante pour Mobile -->
-                    <div class="dropdown-section">
-                        <select id="info-select" class="form-control">
-                            <option value="information">Informations générale</option>
-                            <option value="chiffre-affaire">Chiffre d'Affaires</option>
-                            <option value="en-cours">En Cours</option>
-                            <option value="remise">Remise</option>
-                            <option value="escompte_ristourne">Escompte et Ristourne</option>
-                        </select>
+                    <div id="chiffre-affaire" class="info-content" style="display: none;">
+                        <h4>Chiffre d'Affaire:</h4>
+                        <div class="col-md-8">
+                            <table class="table table-responsive table-striped mt-2">
+                                <tr>
+                                    <td>Chiffre d'Affaire du Mois:</td>
+                                    <td class="value">
+                                        <t t-esc="chiffre_affaire_mois" t-options='{"widget": "monetary", "display_currency": device}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Chiffre d'Affaire en cours de facturation:</td>
+                                    <td class="value">
+                                        <t t-esc="chiffre_affaire_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Chiffre d'Affaire du Mois de l'année précédente:</td>
+                                    <td class="value">
+                                        <t t-esc="chiffre_affaire_mois_precedente" t-options='{"widget": "monetary", "display_currency": device}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Évolution en %:</td>
+                                    <td class="value">
+                                        <t t-esc="evolution_pourcentage"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-
-                    <div id="content-area">
-                        <div id="information" class="info-content">
-                            <h4>
-                               Information generale:
-                            </h4>
-                            <div class="col-md-8">
-                                <table class="table table-responsive table-striped">
-                                    <tr>
-                                        <td>
-                                            <span>Pharmacie :</span>
-                                        </td>
-                                        <td>
-                                            <t t-esc="pharmacie.name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>Adresse :</span>
-                                        </td>
-                                        <td>
-                                            <t t-esc="pharmacie.street"/>
- - 
-                                            <t t-esc="pharmacie.city"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>Pays :</span>
-                                        </td>
-                                        <td>
-                                            <t t-esc="pharmacie.country_id.name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>Téléphone :</span>
-                                        </td>
-                                        <td>
-                                            <t t-esc="pharmacie.phone"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>Email :</span>
-                                        </td>
-                                        <td>
-                                            <t t-esc="pharmacie.email"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div id="chiffre-affaire" class="info-content" style="display: none;">
-                            <div class="col-md-8">
-                            <h4>Chiffre d'Affaire:</h4>
-                                <table class="table table-responsive table-striped mt-2">
-                                    <tr>
-                                        <td>Chiffre d'Affaire du Mois:</td>
-                                        <td>
-                                            <span>
-                                                <t t-esc="chiffre_affaire_mois" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Chiffre d'Affaire en cours de facturation:</td>
-                                        <td>
-                                            <span>
-                                                <t t-esc="chiffre_affaire_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Chiffre d'Affaire du Mois de l'année précédente:</td>
-                                        <td>
-                                            <span>
-                                                <t t-esc="chiffre_affaire_mois_precedente" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Évolution en %:</td>
-                                        <td>
-                                            <span>
-                                                <t t-esc="evolution_pourcentage"/>
-
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div id="remise" class="info-content" style="display: none;">
-                        <h4>Remise:</h4>
-                            <p>Remise:
-                                <span>
-                                    <t t-esc="remise" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                </span>
-                            </p>
-                        </div>
-                        <div id="en-cours" class="info-content" style="display: none;">
-                        <h4>En cours:</h4>
-                            <p>En Cours:
-                                <span>
-                                    <t t-esc="en_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                </span>
-                            </p>
-                        </div>
-                        <div id="escompte_ristourne" class="info-content" style="display: none;">
-                        <h4>Escompte &amp; Ristourne:</h4>
-                            <p> Escompte:
-                                <span>
-                                    <t t-esc="total_escompte" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                </span>
-                            </p>
-                            <p> Ristourne:
-                                <span>
-                                    <t t-esc="total_ristourne" t-options='{"widget": "monetary", "display_currency": device}'/>
-                                </span>
-                            </p>
-                        </div>
+                    <div id="remise" class="info-content" style="display: none;">
+                    <h4>Remise:</h4>
+                        <p>Remise:
+                            <span class="value">
+                                <t t-esc="remise" t-options='{"widget": "monetary", "display_currency": device}'/>
+                            </span>
+                        </p>
+                    </div>
+                    <div id="en-cours" class="info-content" style="display: none;">
+                    <h4>En cours:</h4>
+                        <p>En Cours:
+                            <span class="value">
+                                <t t-esc="en_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
+                            </span>
+                        </p>
+                    </div>
+                    <div id="escompte_ristourne" class="info-content" style="display: none;">
+                    <h4>Escompte &amp; Ristourne:</h4>
+                        <p> Escompte:
+                            <span class="value">
+                                <t t-esc="total_escompte" t-options='{"widget": "monetary", "display_currency": device}'/>
+                            </span>
+                        </p>
+                        <p> Ristourne:
+                            <span class="value">
+                                <t t-esc="total_ristourne" t-options='{"widget": "monetary", "display_currency": device}'/>
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
         </t>
 
         <script>
-            // Pour mobile (liste déroulante)
-            document.getElementById('info-select').addEventListener('change', function() {
-                var selectedValue = this.value;
-                var infoContents = document.querySelectorAll('.info-content');
-                infoContents.forEach(function(content) {
-                    content.style.display = 'none';
+            document.addEventListener('DOMContentLoaded', function() {
+                const infoSelect = document.getElementById('info-select');
+                const tabs = document.querySelectorAll('.tab');
+                const infoContents = document.querySelectorAll('.info-content');
+
+                function showContent(targetId) {
+                    infoContents.forEach(content => {
+                        content.style.display = content.id === targetId ? 'block' : 'none';
+                    });
+                }
+
+                infoSelect.addEventListener('change', function() {
+                    showContent(this.value);
                 });
-                document.getElementById(selectedValue).style.display = 'block';
-            });
 
-            // Pour desktop (onglets)
-            document.querySelectorAll('.tab').forEach(function(tab) {
-                tab.addEventListener('click', function() {
-                    var target = this.getAttribute('data-target');
-                    document.querySelectorAll('.info-content').forEach(function(content) {
-                        content.style.display = 'none';
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('data-target');
+                        showContent(targetId);
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
                     });
-                    document.getElementById(target).style.display = 'block';
-
-                    // Activer l'onglet sélectionné
-                    document.querySelectorAll('.tab').forEach(function(t) {
-                        t.classList.remove('active');
-                    });
-                    this.classList.add('active');
                 });
             });
         </script>
