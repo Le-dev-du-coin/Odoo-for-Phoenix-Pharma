@@ -57,10 +57,6 @@
                 .table td, .table th {
                     vertical-align: middle;
                 }
-                .value {
-                    color: var(--value-color);
-                    font-weight: bold;
-                }
                 @media (max-width: 767px) {
                     .dropdown-section {
                         margin-bottom: 20px;
@@ -108,23 +104,23 @@
                             <table class="table table-responsive table-striped">
                                 <tr>
                                     <td>Pharmacie :</td>
-                                    <td class="value"><t t-esc="pharmacie.name"/></td>
+                                    <td class="text-primary"><t t-esc="pharmacie.name"/></td>
                                 </tr>
                                 <tr>
                                     <td>Adresse :</td>
-                                    <td class="value"><t t-esc="pharmacie.street"/> - <t t-esc="pharmacie.city"/></td>
+                                    <td class="text-primary"><t t-esc="pharmacie.street"/> - <t t-esc="pharmacie.city"/></td>
                                 </tr>
                                 <tr>
                                     <td>Pays :</td>
-                                    <td class="value"><t t-esc="pharmacie.country_id.name"/></td>
+                                    <td class="text-primary"><t t-esc="pharmacie.country_id.name"/></td>
                                 </tr>
                                 <tr>
                                     <td>Téléphone :</td>
-                                    <td class="value"><t t-esc="pharmacie.phone"/></td>
+                                    <td class="text-primary"><t t-esc="pharmacie.phone"/></td>
                                 </tr>
                                 <tr>
                                     <td>Email :</td>
-                                    <td class="value"><t t-esc="pharmacie.email"/></td>
+                                    <td class="text-primary"><t t-esc="pharmacie.email"/></td>
                                 </tr>
                             </table>
                         </div>
@@ -136,25 +132,25 @@
                             <table class="table table-responsive table-striped mt-2">
                                 <tr>
                                     <td>Chiffre d'Affaire du Mois:</td>
-                                    <td class="value">
+                                    <td class="text-primary">
                                         <t t-esc="chiffre_affaire_mois" t-options='{"widget": "monetary", "display_currency": device}'/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Chiffre d'Affaire en cours de facturation:</td>
-                                    <td class="value">
+                                    <td class="text-primary">
                                         <t t-esc="chiffre_affaire_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Chiffre d'Affaire du Mois de l'année précédente:</td>
-                                    <td class="value">
+                                    <td class="text-primary">
                                         <t t-esc="chiffre_affaire_mois_precedente" t-options='{"widget": "monetary", "display_currency": device}'/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Évolution en %:</td>
-                                    <td class="value">
+                                    <td class="text-primary">
                                         <t t-esc="evolution_pourcentage"/>
                                     </td>
                                 </tr>
@@ -164,7 +160,7 @@
                     <div id="remise" class="info-content" style="display: none;">
                     <h4>Remise:</h4>
                         <p>Remise:
-                            <span class="value">
+                            <span class="text-primary">
                                 <t t-esc="remise" t-options='{"widget": "monetary", "display_currency": device}'/>
                             </span>
                         </p>
@@ -172,7 +168,7 @@
                     <div id="en-cours" class="info-content" style="display: none;">
                     <h4>En cours:</h4>
                         <p>En Cours:
-                            <span class="value">
+                            <span class="text-primary">
                                 <t t-esc="en_cours" t-options='{"widget": "monetary", "display_currency": device}'/>
                             </span>
                         </p>
@@ -180,12 +176,12 @@
                     <div id="escompte_ristourne" class="info-content" style="display: none;">
                     <h4>Escompte &amp; Ristourne:</h4>
                         <p> Escompte:
-                            <span class="value">
+                            <span class="text-primary">
                                 <t t-esc="total_escompte" t-options='{"widget": "monetary", "display_currency": device}'/>
                             </span>
                         </p>
                         <p> Ristourne:
-                            <span class="value">
+                            <span class="text-primary">
                                 <t t-esc="total_ristourne" t-options='{"widget": "monetary", "display_currency": device}'/>
                             </span>
                         </p>
