@@ -11,7 +11,7 @@ class MonOfficineController(http.Controller):
     @http.route(["/mon-officine/factures", '/mon-officine/factures/page/<int:page>'], type="http", auth="user", website=True)
     def get_factures(self, page=1, **kwargs):
 
-        factures_per_page = 3
+        factures_per_page = 20
         offset = (page - 1) * factures_per_page
 
         factures = http.request.env["account.move"].sudo().search(
@@ -69,7 +69,7 @@ class MonOfficineController(http.Controller):
     # -------------------------------------------
     @http.route(["/mon-officine/avoirs", '/mon-officine/avoirs/page/<int:page>'], type="http", auth="user", website=True)
     def get_avoirs(self, page=1, **kwargs):
-        avoirs_per_page = 3
+        avoirs_per_page = 20
         offset = (page - 1) * avoirs_per_page
 
         avoirs = http.request.env["account.move"].sudo().search(
