@@ -6,30 +6,37 @@
         <t t-call="website.layout">
             <div class="container">
                 <h1 class="text-primary text-center my-4">Vos Commandes</h1>
-                <table class="table table-bordered">
-                    <thead class="bg-secondary text-white text-center">
-                        <tr>
-                            <th>Commande</th>
-                            <th>Date</th>
-                            <th>Montant Total</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        <t t-foreach="orders" t-as="order">
+                <div class="shadow p-3 mb-5 bg-body rounded-3">
+                    <table class="table table-bordered">
+                        <thead class="bg-primary text-white text-center">
                             <tr>
-                                <td>
-                                    <t t-esc="order.name"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.date_order"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                </td>
+                                <th>Commande</th>
+                                <th>Date</th>
+                                <th>Montant Total</th>
                             </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <t t-foreach="orders" t-as="order">
+                                <tr>
+                                    <td>
+                                        <t t-esc="order.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.date_order"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="products_pager form-inline justify-content-center mt-3">
+                        <t t-call="website.pager">
+                            <!-- <t t-set="url" t-value="/command/vos-commandes/"/> -->
                         </t>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
@@ -39,31 +46,38 @@
         <t t-call="website.layout">
             <div class="container">
                 <h1 class="text-primary text-center my-4">Commandes Extranet</h1>
-                <table class="table table-bordered">
-                    <thead class="bg-secondary text-white text-center">
-                        <tr>
-                            <th>Commande</th>
-                            <th>Date</th>
-                            <th>Montant Total</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        <t t-foreach="extranet_orders" t-as="order">
+                <div class="shadow p-3 mb-5 bg-body rounded-3">
+                    <table class="table table-bordered">
+                        <thead class="bg-primary text-white text-center">
                             <tr>
-                                <td>
-                                    <t t-esc="order.name"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.date_order"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                </td>
-
+                                <th>Commande</th>
+                                <th>Date</th>
+                                <th>Montant Total</th>
                             </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <t t-foreach="extranet_orders" t-as="order">
+                                <tr>
+                                    <td>
+                                        <t t-esc="order.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.date_order"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
+                                    </td>
+
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="products_pager form-inline justify-content-center mt-3">
+                        <t t-call="website.pager">
+                            <!-- <t t-set="url" t-value="/command/vos-commandes/"/> -->
                         </t>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
@@ -73,30 +87,32 @@
         <t t-call="website.layout">
             <div class="container">
                 <h1 class="text-primary text-center my-4">Préparation en Cours</h1>
-                <table class="table table-bordered table-striped">
-                    <thead class="bg-secondary text-white text-center">
-                        <tr>
-                            <th>Commande</th>
-                            <th>Date</th>
-                            <th>Montant Total</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        <t t-foreach="pending_orders" t-as="order">
+                <div class="shadow p-3 mb-5 bg-body rounded-3">
+                    <table class="table table-bordered table-striped">
+                        <thead class="bg-primary text-white text-center">
                             <tr>
-                                <td>
-                                    <t t-esc="order.name"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.date_order"/>
-                                </td>
-                                <td>
-                                    <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                </td>
+                                <th>Commande</th>
+                                <th>Date</th>
+                                <th>Montant Total</th>
                             </tr>
-                        </t>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="text-center">
+                            <t t-foreach="pending_orders" t-as="order">
+                                <tr>
+                                    <td>
+                                        <t t-esc="order.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.date_order"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </t>
     </template>
