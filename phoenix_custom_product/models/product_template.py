@@ -13,6 +13,7 @@ class ProductTemplate(models.Model):
 
     # Promotion information
     promotion_title = fields.Char(string='Titre de la Promotion', store=True)
+    promotion_condition = fields.Char(string='Conditions', size=50)
     promotion_start_at = fields.Date(string='Date de Début de Promotion', store=True)
     promotion_end_at = fields.Date(string='Date de Fin de Promotion', store=True)
 

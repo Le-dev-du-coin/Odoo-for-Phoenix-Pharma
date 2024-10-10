@@ -22,7 +22,7 @@
                                         <t t-esc="order.name"/>
                                     </td>
                                     <td>
-                                        <t t-esc="order.date_order"/>
+                                        <t t-esc="order.date_order.strftime('%d-%m-%Y') if order.date_order else ''"/>
                                     </td>
                                     <td>
                                         <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
@@ -62,7 +62,7 @@
                                         <t t-esc="order.name"/>
                                     </td>
                                     <td>
-                                        <t t-esc="order.date_order"/>
+                                        <t t-esc="order.date_order.strftime('%d-%m-%Y') if order.date_order else ''"/>
                                     </td>
                                     <td>
                                         <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
@@ -103,7 +103,7 @@
                                         <t t-esc="order.name"/>
                                     </td>
                                     <td>
-                                        <t t-esc="order.date_order"/>
+                                        <t t-esc="order.date_order.strftime('%d-%m-%Y') if order.date_order else ''"/>
                                     </td>
                                     <td>
                                         <t t-esc="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>

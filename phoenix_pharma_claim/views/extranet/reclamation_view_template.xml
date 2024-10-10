@@ -5,41 +5,44 @@
         <t t-call="website.layout">
             <div class="container">
                 <h1 class=" text-center text-primary my-3">Vos reclamations</h1>
-
-                <table class="table table-bordered table-responsive table-secondary-striped">
-                    <thead>
-                        <th>Date de creation</th>
-                        <th>N° Facture</th>
-                        <th>Statut</th>
-                        <th>Date cloture</th>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="claim" t-as="reclamation">
-                            <tr>
-                                <td>
-                                    <t t-esc="reclamation.open_date"/>
-                                </td>
-                                <td>
-                                     <t t-esc="reclamation.invoice_number"/>
-                                </td>
-                                <td>
-                                    <t t-if="reclamation.state == 'draft'">
-                                        <span class="text-warning">En attente</span>
-                                    </t>
-                                     <t t-elif="reclamation.state == 'open'">
-                                        <span class="text-success">Traitement en cours</span>
-                                    </t>
-                                    <t t-elif="reclamation.state == 'closed'">
-                                        <span class="text-danger">Cloturee</span>
-                                    </t>
-                                </td>
-                                <td>
-                                    <t t-esc="reclamation.closure_date"/>
-                                </td>
-                            </tr>
+                <div class="shadow p-3 mb-5 bg-body rounded-3">
+                    <table class="table table-bordered table-responsive table-secondary-striped">
+                        <thead class="bg-primary text-white text-center">
+                            <th>Date de creation</th>
+                            <th>N° Facture</th>
+                            <th>Statut</th>
+                            <th>Date cloture</th>
+                        </thead>
+                        <tbody class="text-center">
+                            <t t-foreach="claim" t-as="reclamation">
+                                <tr>
+                                    <td>
+                                        <t t-esc="reclamation.open_date.strftime('%d-%m-%Y') if reclamation.open_date else ''"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="reclamation.invoice_number"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="reclamation.state == 'draft'">
+                                            <span class="badge bg-warning">En attente</span>
+                                        </t>
+                                        <t t-elif="reclamation.state == 'closed'">
+                                            <span class="badge bg-danger">Cloturee</span>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-esc="reclamation.closure_date.strftime('%d-%m-%Y') if reclamation.closure_date else ''"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="products_pager form-inline justify-content-center mt-3">
+                        <t t-call="website.pager">
+                            <!-- <t t-set="url" t-value="/command/vos-commandes/"/> -->
                         </t>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </t>
     </template>

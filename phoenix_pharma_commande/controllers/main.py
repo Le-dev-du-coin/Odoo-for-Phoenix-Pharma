@@ -9,7 +9,7 @@ class CommandControllers(http.Controller):
     # --------------------------------------------- 
     @http.route(['/command/vos-commandes/', '/command/vos-commandes/page/<int:page>'], type='http', auth='user', website=True)
     def all_command(self, page=1, **kwargs):
-        commandes_per_page = 3
+        commandes_per_page = 20
         offset = (page - 1) * commandes_per_page
 
         orders = http.request.env['sale.order'].sudo().search([

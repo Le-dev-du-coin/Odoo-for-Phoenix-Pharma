@@ -1,6 +1,26 @@
 <odoo>
     <template id="promotion_products_template" name="Promotions">
         <t t-call="website.layout">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+            <style>
+                .promo-toggle {
+                    cursor: pointer;
+                    margin-left: 5px;
+                    transition: transform 0.3s ease;
+                }
+                .promo-toggle.active {
+                    transform: rotate(180deg);
+                }
+                .promo-description {
+                    display: none;
+                    margin-top: 10px;
+                    padding: 5px;
+                    background-color: #f8f9fa;
+                    border-radius: 4px;
+                    font-size: 0.9em;
+                }
+            </style>
+            
             <div class="container">
                 <h1 class="text-center text-primary my-3">Promotions</h1>
 
@@ -52,8 +72,17 @@
                                         </span>
                                     </small>
                                     <t t-if="product.promotion">
-                                        <li class="text-success">Promotion</li>
-                                    </t>
+                                            <div class="text-success">
+                                                Promotion
+                                                <i class="fas fa-chevron-up promo-toggle" t-att-onclick="'togglePromo(this, \'promo-details-' + str(product.id) + '\')'" t-att-data-target="'promo-details-' + str(product.id)"></i>
+                                            </div>
+                                            <div t-att-id="'promo-details-' + str(product.id)" class="promo-description">
+                                                <p>Conditions:</p>
+                                                <ul>
+                                                    <li><t t-esc="product.promotion_condition"/></li>
+                                                </ul>
+                                            </div>
+                                        </t>
                                 </td>
                                 <td class="text-center">
                                     <div class="css_quantity input-group mx-auto justify-content-center">
@@ -89,6 +118,25 @@
                                 </td>
                             </tr>
                         </t>
+                        <script type="text/javascript">
+                function togglePromo(element, targetId) {
+                    var targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        if (targetElement.style.display === 'none' || targetElement.style.display === '') {
+                            targetElement.style.display = 'block';
+                            element.classList.add('active');
+                            element.classList.remove('fa-chevron-up');
+                            element.classList.add('fa-chevron-down');
+                        } else {
+                            targetElement.style.display = 'none';
+                            element.classList.remove('active');
+                            element.classList.remove('fa-chevron-down');
+                            element.classList.add('fa-chevron-up');
+                        }
+                    }
+                }
+            </script>
+ 
                     </tbody>
                 </table>
                 <!-- Pagination -->
